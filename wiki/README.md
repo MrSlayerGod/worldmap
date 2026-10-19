@@ -23,3 +23,15 @@ tile exports. The tile dataset is MrSlayerGod/void-map-tiles, whose image conten
 The Common.js snapshot preserves the existing feature rendering, atlas URL,
 infobox charge switcher and quest checklist code. Only the tile source URL
 was replaced. It must be installed on the wiki separately from GitHub Pages.
+## Tile detail regression
+
+Pin tile delivery to owner repository revision
+`5d08cecd3a9d6e6366961d17907bd256954b5287` (Update images using new renderer).
+The subsequent `02197cd35b` tile update removes visible trees, paths and other
+objects in the compared Ardougne tile. Selecting master exposed that regression.
+The pin restores the preceding detailed images without rewriting the tile repo.
+Only change this revision after comparing rendered locations at multiple zooms.
+
+The bundled Python generator is a separate OSRS/RuneLite pipeline. It downloads
+the latest OSRS cache and is not configured for LegacyScape 667 cache exports.
+Running it unchanged is not a repair for the 667 dataset.
