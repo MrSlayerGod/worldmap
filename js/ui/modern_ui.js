@@ -39,10 +39,54 @@ export function initModernUI(map, controls) {
         mobileMenu.setAttribute('aria-expanded', String(open));
         mobileMenu.setAttribute('aria-label', open ? 'Close map explorer' : 'Open map explorer');
         mobileMenu.querySelector('use').setAttribute('href', open ? '#ic-close' : '#ic-menu');
+        refreshSidebarAccessibility();
     }
 
     mobileMenu.addEventListener('click', () => setMobileSidebar(!sidebar.classList.contains('is-open')));
     backdrop.addEventListener('click', () => setMobileSidebar(false));
+
+    // Desktop: collapse the large explorer to make room for the map.
+    // Retain user choice across visits. Mobile keeps its original hamburger drawer.
+    const sidebarMinimize = el('sidebar-minimize');
+    const sidebarReopen = el('sidebar-reopen');
+    const mobileLayout = window.matchMedia('(max-width: 760px)');
+    const savedSidebar = (() => {
+        try { return window.localStorage.getItem('legacyscape:explorer-collapsed') === 'yes'; }
+        catch (_) { return false; }
+    })();
+
+    function refreshSidebarAccessibility() {
+        const closed = mobileLayout.matches
+            ? !sidebar.classList.contains('is-open')
+            : document.body.classList.contains('atlas-sidebar-collapsed');
+        sidebar.inert = closed;
+        sidebar.setAttribute('aria-hidden', String(closed));
+    }
+
+    function setSidebarCollapsed(collapsed, save = true, focusButton = false) {
+        document.body.classList.toggle('atlas-sidebar-collapsed', collapsed);
+        sidebarReopen.hidden = !collapsed || mobileLayout.matches;
+        sidebarReopen.setAttribute('aria-expanded', String(!collapsed));
+        refreshSidebarAccessibility();
+        if (save) {
+            try { window.localStorage.setItem('legacyscape:explorer-collapsed', collapsed ? 'yes' : 'no'); }
+            catch (_) { /* Private browsing can disable storage. */ }
+        }
+        if (focusButton && !mobileLayout.matches) {
+            (collapsed ? sidebarReopen : sidebarMinimize).focus();
+        }
+    }
+    sidebarMinimize.addEventListener('click', () => setSidebarCollapsed(true, true, true));
+    sidebarReopen.addEventListener('click', () => setSidebarCollapsed(false, true, true));
+    setSidebarCollapsed(savedSidebar, false);
+
+    const layoutChanged = () => {
+        if (!mobileLayout.matches) setMobileSidebar(false);
+        sidebarReopen.hidden = !document.body.classList.contains('atlas-sidebar-collapsed') || mobileLayout.matches;
+        refreshSidebarAccessibility();
+    };
+    if (mobileLayout.addEventListener) mobileLayout.addEventListener('change', layoutChanged);
+    else mobileLayout.addListener(layoutChanged);
 
     function closeSearch() {
         searchResults.hidden = true;
@@ -201,7 +245,8 @@ export function initModernUI(map, controls) {
         const editing = element && (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.isContentEditable);
         if (event.key === '/' && !editing) {
             event.preventDefault();
-            setMobileSidebar(true);
+            if (mobileLayout.matches) setMobileSidebar(true);
+            else setSidebarCollapsed(false);
             searchInput.focus();
         } else if (event.key === 'Escape') {
             closeSearch();

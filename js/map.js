@@ -2,6 +2,7 @@
 
 import { Position } from './model/Position.js';
 import { initModernUI } from './ui/modern_ui.js';
+import { createAtlasLoadingController } from './ui/loading_controller.js';
 
 // Original Void map controls — retained for compatibility.
 import { CollectionControl } from './controls/collection_control.js';
@@ -72,6 +73,10 @@ $(document).ready(function () {
         }
     });
 
+    // Track actual Leaflet tile requests for the initial loading screen and
+    // compact status strip during navigation; never block map interactions.
+    const atlasLoader = createAtlasLoadingController();
+
     map.updateMapPath = function () {
         if (map.tile_layer !== undefined) {
             map.removeLayer(map.tile_layer);
@@ -80,11 +85,11 @@ $(document).ready(function () {
             tileSize: tileSize,
             bounds: bounds
         });
+        atlasLoader.watch(map.tile_layer);
         map.tile_layer.addTo(map);
         map.invalidateSize();
     };
 
-    map.updateMapPath();
     map.getContainer().focus();
 
     // Position.toCentreLatLng is an INSTANCE method in your Position.js.
@@ -188,6 +193,9 @@ $(document).ready(function () {
             });
         }
     }
+
+    // Begin tile loading after locating the requested destination.
+    map.updateMapPath();
 
     // Original map controls retained.
     // Original controls remain installed. The new UI presents a cleaner
