@@ -47,6 +47,8 @@ $(document).ready(function () {
         minZoom: minZoom,
         maxZoom: maxZoom,
         zoom: 8,
+        zoomSnap: 1,
+        zoomDelta: 1,
         zoomControl: false
     });
 
@@ -232,7 +234,7 @@ $(document).ready(function () {
         newUrl.searchParams.set('centreX', String(centrePos.x));
         newUrl.searchParams.set('centreY', String(centrePos.y));
         newUrl.searchParams.set('centreZ', String(centrePos.z));
-        newUrl.searchParams.set('zoom', String(map.getZoom()));
+        newUrl.searchParams.set('zoom', String(Math.round(map.getZoom())));
         window.history.replaceState(null, '', newUrl.toString());
     };
 

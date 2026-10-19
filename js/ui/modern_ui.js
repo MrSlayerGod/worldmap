@@ -95,7 +95,15 @@ export function initModernUI(map, controls) {
         clearSelection(false);
         chosenMarker = L.marker(centre, { icon: selectionIcon, title: name || 'Selected coordinates' }).addTo(map);
         chosenMarker.bindPopup(`<strong>${escapeText(name || 'Selected coordinates')}</strong><br>${x}, ${y}, ${z}`);
-        map.flyTo(centre, Math.max(map.getZoom(), 8), { duration: 0.55, animate: true });
+        // Quick Travel must not use flyTo here. The Void map uses a custom
+        // offset CRS (zoom 8 is its 1:1 tile scale), and animated flyTo can
+        // expose fractional intermediate zooms, leaving labels/tiles visually
+        // desynchronised when destinations are clicked repeatedly.
+        // Stop any ongoing map animation and snap immediately to an integer
+        // zoom. Leaflet keeps the DOM labels attached to their game tiles.
+        map.stop();
+        const destinationZoom = Math.min(map.getMaxZoom(), Math.max(8, Math.round(map.getZoom())));
+        map.setView(centre, destinationZoom, { animate: false });
         el('selected-location-name').textContent = name || 'Custom coordinates';
         el('selected-location-coords').textContent = `${x}, ${y}, ${z} · Floor ${z}`;
         resultCard.hidden = false;

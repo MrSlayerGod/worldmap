@@ -25,3 +25,21 @@ To migrate to your own 667 tile exports, edit `js/map.js` in `CustomTileLayer.ge
 - Upload this as a replacement website, not as a new MediaWiki `Module:Map`.
 - Wiki map embeds still need the correct `MediaWiki:Common.js` and `Common.css` wiring.
 - Try screenshot tests at zoom 4, 7, 8 and 11; labels should now move with map tiles rather than repaint with offsets.
+
+
+## v4 Quick Travel fix
+
+Quick Travel and search/goto coordinates use an immediate, integer-zoom
+`map.setView(...)` rather than `map.flyTo(...)`. This avoids the fractional
+zoom `7.960...` shown in user screenshots and prevents animated tile and
+label offsets in the original Void custom offset CRS. Rapid successive
+Quick Travel clicks are safe. Map dragging and regular zoom controls remain.
+
+To verify in the browser:
+1. Open the map, press Lumbridge, Grand Exchange, Falador and Varrock in succession.
+2. Check that location labels stay on their map positions.
+3. Check that the URL zoom is a whole number (8, 9, etc).
+4. Zoom and drag manually, then use Quick Travel again; no label drift.
+
+If GitHub Pages serves the old map after upload, clear the cached
+`js/ui/modern_ui.js` and `js/map.js` (hard refresh with Ctrl+F5).
