@@ -1,85 +1,73 @@
 'use strict';
 
 import { Position } from '../model/Position.js';
-import { CanvasLayer } from '../external/L.CanvasLayer.js';
 import { Region, MIN_X, MAX_X, MIN_Y, MAX_Y, REGION_WIDTH, REGION_HEIGHT } from '../model/Region.js';
 
-function clamp(value, min, max) {
-    return Math.max(min, Math.min(max, value));
-}
-
-var RegionLabelsCanvas = CanvasLayer.extend({
-    setData: function () {
-        this.needRedraw();
-    },
-
-    onDrawLayer: function (info) {
-        const zoom = this._map.getZoom();
-        const ctx = info.canvas.getContext('2d');
-        ctx.clearRect(0, 0, info.canvas.width, info.canvas.height);
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
-        ctx.strokeStyle = 'rgba(8, 12, 18, 0.75)';
-        ctx.lineWidth = 3;
-
-        const fontSize = clamp(12 * Math.pow(1.12, zoom - 7), 10, 20);
-        ctx.font = `700 ${fontSize}px Inter, Segoe UI, Calibri, sans-serif`;
-
-        const bounds = this._map.getBounds().pad(0.1);
-
-        for (let x = MIN_X; x < MAX_X; x += REGION_WIDTH) {
-            for (let y = MIN_Y; y < MAX_Y; y += REGION_HEIGHT) {
-                const position = new Position(x + (REGION_WIDTH / 2), y + (REGION_HEIGHT / 2), 0);
-                const latLng = position.toCentreLatLng(this._map);
-                if (!bounds.contains(latLng)) continue;
-
-                const region = Region.fromPosition(position);
-                const point = info.layer._map.latLngToContainerPoint(latLng);
-                const text = region.id.toString();
-                ctx.strokeText(text, point.x, point.y);
-                ctx.fillText(text, point.x, point.y);
-            }
-        }
-    }
-});
-
+// Region IDs use the same Leaflet positioning as the underlying tile layer.
 export var RegionLabelsControl = L.Control.extend({
-    options: {
-        position: 'topleft'
-    },
+    options: { position: 'topleft' },
 
     onAdd: function (map) {
-        map.createPane('region-labels');
-        map.getPane('region-labels').style.zIndex = 415;
-        map.getPane('region-labels').style.pointerEvents = 'none';
-
-        var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control noselect');
-        container.style.background = 'none';
-        container.style.width = '130px';
-        container.style.height = 'auto';
-
-        var labelsButton = L.DomUtil.create('a', 'leaflet-bar leaflet-control leaflet-control-custom', container);
-        labelsButton.id = 'toggle-region-labels';
-        labelsButton.innerHTML = 'Toggle Region Labels';
-
-        this._regionLabelsCanvas = new RegionLabelsCanvas({ pane: 'region-labels' });
-        map.getPane('region-labels').style.display = 'none';
-        map.addLayer(this._regionLabelsCanvas);
-
+        this._map = map;
         this.visible = false;
+        this._pane = map.createPane('region-labels');
+        this._pane.style.zIndex = '445';
+        this._pane.style.pointerEvents = 'none';
+        this._labels = L.layerGroup().addTo(map);
+        this._markers = new Map();
 
-        L.DomEvent.on(labelsButton, 'click', () => {
-            if (this.visible) {
-                map.getPane('region-labels').style.display = 'none';
-            } else {
-                map.getPane('region-labels').style.display = '';
-                this._regionLabelsCanvas.drawLayer();
-            }
-            this.visible = !this.visible;
-        }, this);
-
+        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control noselect');
+        const button = L.DomUtil.create('a', 'leaflet-control-custom', container);
+        button.id = 'toggle-region-labels';
+        button.textContent = 'Toggle Region Labels';
+        button.href = '#';
         L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.on(button, 'click', L.DomEvent.preventDefault);
+        L.DomEvent.on(button, 'click', () => {
+            this.visible = !this.visible;
+            this._render();
+        });
+        map.on('moveend zoomend planeChanged resize', this._render, this);
         return container;
+    },
+
+    onRemove: function (map) {
+        map.off('moveend zoomend planeChanged resize', this._render, this);
+        if (this._labels) map.removeLayer(this._labels);
+    },
+
+    _render: function () {
+        this._labels.clearLayers();
+        if (!this.visible) return;
+        const map = this._map;
+        const bounds = map.getBounds().pad(0.05);
+        const a = Position.fromLatLng(map, bounds.getSouthWest(), map.plane);
+        const b = Position.fromLatLng(map, bounds.getNorthEast(), map.plane);
+        const startX = Math.max(MIN_X, Math.floor(Math.min(a.x, b.x) / REGION_WIDTH) * REGION_WIDTH);
+        const endX = Math.min(MAX_X, Math.max(a.x, b.x));
+        const startY = Math.max(MIN_Y, Math.floor(Math.min(a.y, b.y) / REGION_HEIGHT) * REGION_HEIGHT);
+        const endY = Math.min(MAX_Y, Math.max(a.y, b.y));
+        const zoom = map.getZoom();
+        for (let x = startX; x <= endX; x += REGION_WIDTH) {
+            for (let y = startY; y <= endY; y += REGION_HEIGHT) {
+                const position = new Position(x + REGION_WIDTH / 2, y + REGION_HEIGHT / 2, 0);
+                const regionId = Region.fromPosition(position).id;
+                let marker = this._markers.get(regionId);
+                if (!marker) {
+                    marker = L.marker(position.toCentreLatLng(map), {
+                        pane: 'region-labels',
+                        interactive: false,
+                        keyboard: false,
+                        icon: L.divIcon({
+                            className: 'rs-region-label-icon',
+                            html: `<span class="rs-region-label">${regionId}</span>`,
+                            iconSize: [0, 0], iconAnchor: [0, 0]
+                        })
+                    });
+                    this._markers.set(regionId, marker);
+                }
+                if (zoom >= 5) this._labels.addLayer(marker);
+            }
+        }
     }
 });

@@ -253,19 +253,20 @@ export var CollectionControl = L.Control.extend({
     },
 
     _copyCodeToClipboard: function() {
-        var $temp = $("<textarea>");
-        $("body").append($temp);
-        $temp.val($("#code-output").text()).select();
-        document.execCommand("copy");
-        $temp.remove();
-
-        Swal({
-            position: 'top',
-            type: 'success',
-            title: `Copied to clipboard`,
-            showConfirmButton: false,
-            timer: 6000,
-            toast: true,
-        });
+        const content = $("#code-output").text();
+        const showResult = (message) => document.dispatchEvent(new CustomEvent('atlas:toast', { detail: message }));
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(content).then(
+                () => showResult('Map editor data copied'),
+                () => showResult('Unable to copy editor data')
+            );
+        } else {
+            const $temp = $("<textarea>");
+            $("body").append($temp);
+            $temp.val(content).select();
+            const copied = document.execCommand('copy');
+            $temp.remove();
+            showResult(copied ? 'Map editor data copied' : 'Unable to copy editor data');
+        }
     }
 });

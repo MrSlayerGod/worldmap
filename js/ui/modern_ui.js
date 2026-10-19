@@ -23,6 +23,8 @@ export function initModernUI(map, controls) {
 
     const svg = (icon) => `<svg class="svg-icon"><use href="#ic-${icon}"></use></svg>`;
 
+    document.addEventListener('atlas:toast', (event) => notify(String(event.detail || 'Action complete')));
+
     function notify(message) {
         const toast = el('atlas-toast');
         toast.textContent = message;
@@ -152,9 +154,22 @@ export function initModernUI(map, controls) {
     if (collectionRoot) {
         collectionRoot.classList.add('modern-collection-toolbar');
         el('advanced-tools-toolbar').appendChild(collectionRoot);
-        const oldToolIcons = ['copy', 'settings', null, null, null, 'undo', 'trash'];
+        const toolIcons = ['copy', 'settings', 'area', 'polygon', 'path', 'undo', 'trash'];
+        const toolCaptions = ['Copy', 'Settings', 'Area', 'Polygon', 'Path', 'Undo', 'Clear'];
         Array.from(collectionRoot.querySelectorAll('a.leaflet-control-custom')).forEach((anchor, index) => {
-            if (oldToolIcons[index]) anchor.innerHTML = svg(oldToolIcons[index]);
+            anchor.innerHTML = `${svg(toolIcons[index])}<span class="modern-tool-caption">${toolCaptions[index]}</span>`;
+            anchor.addEventListener('click', () => {
+                const hint = el('advanced-tool-hint');
+                if (index >= 2 && index <= 4) {
+                    hint.textContent = `${toolCaptions[index]} tool selected. Click tiles to draw; click it again to exit.`;
+                } else if (index === 0) {
+                    hint.textContent = 'Copies the current drawn geometry to your clipboard.';
+                } else if (index === 1) {
+                    hint.textContent = 'Set the output format for the original Void editor.';
+                } else {
+                    hint.textContent = 'Drawing updated. Select a drawing tool to continue.';
+                }
+            });
             anchor.setAttribute('title', toolActions[index] || 'Map tool');
             anchor.setAttribute('aria-label', toolActions[index] || 'Map tool');
             anchor.setAttribute('role', 'button');

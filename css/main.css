@@ -255,3 +255,41 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; scroll-behavior: auto !important; animation-duration: 0.01ms !important; }
 }
+
+
+/* v3: stable, Leaflet-anchored place and region names.
+   Labels are centered inside each marker. No canvas alignment or zoom redraw glitches. */
+.rs-place-label-icon, .rs-region-label-icon { border: 0; background: none; pointer-events: none !important; }
+.rs-map-label, .rs-region-label {
+  display: block; position: absolute; top: 0; left: 0;
+  transform: translate(-50%, -50%);
+  width: max-content; max-width: 190px;
+  text-align: center; white-space: normal; overflow-wrap: normal;
+  line-height: 1.12; letter-spacing: -.015em;
+  color: #fff; font-family: Inter, 'Segoe UI', Verdana, sans-serif;
+  font-weight: 750;
+  text-shadow: 0 1px 2px #081018, 1px 0 2px #081018, -1px 0 2px #081018,
+    0 -1px 3px #081018, 0 2px 6px #05090d;
+  user-select: none; pointer-events: none;
+}
+.rs-map-label--default { font-size: 12px; max-width: 100px; }
+.rs-map-label--medium { font-size: 15px; max-width: 150px; }
+.rs-map-label--large { font-size: 26px; max-width: 220px; font-weight: 850; color: #f3ac2d;
+  text-shadow: 0 2px 3px #111218, 0 0 10px #161619; }
+.rs-zoom-overview .rs-map-label--large { font-size: 19px; max-width: 165px; }
+.rs-zoom-overview .rs-map-label--medium { font-size: 12px; max-width: 120px; }
+.rs-zoom-detail .rs-map-label--default { font-size: 14px; max-width: 125px; }
+.rs-zoom-detail .rs-map-label--medium { font-size: 18px; max-width: 170px; }
+.rs-zoom-detail .rs-map-label--large { font-size: 29px; max-width: 235px; }
+.rs-region-label { font-size: 12px; color: #bce2ee; max-width: none; background: rgba(11,21,32,.65);
+  border: 1px solid rgba(151,204,231,.26); padding: 3px 6px; border-radius: 5px; }
+
+/* Real map tools, not an image of a toolbar. */
+.advanced-tools-panel { width: 350px; }
+.advanced-tools-toolbar { min-height: 150px; }
+.modern-collection-toolbar { display: grid !important; grid-template-columns: repeat(4,minmax(0,1fr)) !important; gap: 8px !important; }
+.modern-collection-toolbar a.leaflet-control-custom { min-height: 67px; height: 67px !important; gap: 5px; flex-direction: column; align-items: center; justify-content: center; }
+.modern-collection-toolbar .svg-icon { width: 20px; height: 20px; }
+.modern-collection-toolbar .modern-tool-caption { display: block; font-size: 9px; font-weight: 700; line-height: 1.2; text-align: center; white-space: nowrap; }
+.advanced-tools-hint { padding: 10px 12px; margin-top: 13px; color: #b7c3cc; font-size: 11px; background: #1f2e3a; border: 1px solid #344654; border-radius: 9px; }
+@media (max-width: 760px) { .advanced-tools-panel { width: min(350px,calc(100vw - 116px)); } }
