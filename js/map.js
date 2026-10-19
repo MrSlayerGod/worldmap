@@ -69,7 +69,7 @@ $(document).ready(function () {
         getTileUrl: function (coords) {
             // When your 667 tiles are generated and hosted, this is the line to change:
             // return `./map_tiles/${map.plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
-            return `https://cdn.jsdelivr.net/gh/MrSlayerGod/void-map-tiles@master/${map.plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
+            return `https://cdn.jsdelivr.net/gh/MrSlayerGod/void-map-tiles@5d08cecd3a9d6e6366961d17907bd256954b5287/${map.plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
         }
     });
 
