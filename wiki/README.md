@@ -17,9 +17,9 @@ It does not need the obsolete wiki-map.html viewer or iframe permissions.
 Miraheze's image Content Security Policy permits cdn.jsdelivr.net but blocks
 raw.githubusercontent.com. The wiki script previously used the blocked host.
 Both the atlas and wiki now request the existing image tiles through jsDelivr.
-This changes delivery only; this repository does not contain replacement 667
-map tile exports. The underlying tile dataset remains GregHib/void-map-tiles.
+The dataset is hosted separately; this atlas repository does not contain the
+tile exports. The tile dataset is MrSlayerGod/void-map-tiles, whose image contents differ from the upstream GregHib repository.
 
 The Common.js snapshot preserves the existing feature rendering, atlas URL,
-infobox charge switcher and quest checklist code. Only the blocked tile URL
+infobox charge switcher and quest checklist code. Only the tile source URL
 was replaced. It must be installed on the wiki separately from GitHub Pages.
