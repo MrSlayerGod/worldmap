@@ -1,6 +1,7 @@
 /* LegacyScape 667 wiki feature viewer.
    Uses the SAME SimpleOffset CRS, tiles and coordinate conversion as Void.
-   The OSRS Map module supplies standard GeoJSON via ?geojson=... . */
+   The wiki sends the OSRS module's GeoJSON via a safe postMessage bridge;
+   legacy direct links may still include ?geojson=... . */
 'use strict';
 
 const params = new URLSearchParams(window.location.search);
@@ -79,6 +80,17 @@ const coordsBox = document.getElementById('coordinates');
 const statusBox = document.getElementById('status');
 const note = document.getElementById('map-note');
 const featureLayer = L.layerGroup().addTo(map);
+const atlasLink = document.getElementById('atlas-link');
+
+function updateAtlasLink() {
+    const game = latLngToGame(map.getCenter());
+    const query = new URLSearchParams({
+        centreX: String(game.x), centreY: String(game.y),
+        centreZ: String(plane), zoom: String(Math.round(map.getZoom()))
+    });
+    atlasLink.href = './?' + query.toString();
+}
+
 
 function noteMessage(message) {
     note.hidden = !message;
@@ -247,6 +259,10 @@ function setFloor(floor) {
         button.classList.toggle('active', active);
         button.setAttribute('aria-pressed', String(active));
     });
+    const url = new URL(window.location.href);
+    url.searchParams.set('centreZ', String(plane));
+    window.history.replaceState(null, '', url.toString());
+    updateAtlasLink();
 }
 
 document.querySelectorAll('[data-floor]').forEach(function (button) {
@@ -264,9 +280,38 @@ map.on('moveend', function () {
     url.searchParams.set('centreZ', plane);
     url.searchParams.set('zoom', Math.round(map.getZoom()));
     window.history.replaceState(null, '', url.toString());
+    updateAtlasLink();
 });
 map.on('zoomend', function () {
     if (!Number.isInteger(map.getZoom())) map.setZoom(Math.round(map.getZoom()), { animate: false });
 });
 setFloor(plane);
+updateAtlasLink();
 coordsBox.textContent = centreX + ', ' + centreY + ', ' + plane;
+
+// Embedded Miraheze map bridge: accept features only from our wiki.
+// Avoid huge URLs (and literal HTML anchors showing in wiki tables).
+const allowedWikiOrigins = new Set([
+    'https://legacyscape667.miraheze.org',
+    'https://mrslayergod.github.io'
+]);
+window.addEventListener('message', function (event) {
+    if (event.source !== window.parent || !allowedWikiOrigins.has(event.origin)) return;
+    const payload = event.data;
+    if (!payload || payload.type !== 'legacyscape-map-features') return;
+    try {
+        const data = payload.collection;
+        if (!data || data.type !== 'FeatureCollection' || !Array.isArray(data.features) || data.features.length > 500) {
+            throw new Error('Invalid GeoJSON FeatureCollection');
+        }
+        collection = data;
+        renderFeatures();
+        window.parent.postMessage({ type: 'legacyscape-map-rendered' }, event.origin);
+    } catch (error) {
+        window.parent.postMessage({ type: 'legacyscape-map-error' }, event.origin);
+        noteMessage('The wiki map could not be loaded: ' + error.message);
+    }
+});
+if (window.parent !== window) {
+    window.parent.postMessage({ type: 'legacyscape-map-ready' }, '*');
+}
