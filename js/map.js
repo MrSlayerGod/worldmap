@@ -63,13 +63,13 @@ $(document).ready(function () {
     const requestedPlane = parseInteger(urlParams.get('centreZ'));
     map.plane = isPlane(requestedPlane) ? requestedPlane : 0;
 
-    // Preserve the exact tile source from your current repository. These are
-    // Void/OSRS-era hosted tiles, NOT automatically generated 667 cache tiles.
+    // Use the owner-maintained tile dataset through Miraheze-permitted jsDelivr.
+    // Dataset provenance alone does not validate every location against the 667 cache.
     const CustomTileLayer = L.TileLayer.extend({
         getTileUrl: function (coords) {
             // When your 667 tiles are generated and hosted, this is the line to change:
             // return `./map_tiles/${map.plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
-            return `https://cdn.jsdelivr.net/gh/GregHib/void-map-tiles@master/${map.plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
+            return `https://cdn.jsdelivr.net/gh/MrSlayerGod/void-map-tiles@master/${map.plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
         }
     });
 

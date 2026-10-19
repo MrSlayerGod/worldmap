@@ -18,7 +18,7 @@ It is **not** a static screenshot or a dummy mockup. The map uses Leaflet, origi
 4. In the right-side **TOOLS** panel, select **Area**, **Polygon** or **Path** to enable the live map drawing features.
 
 ## Map tile source
-The map still fetches `GregHib/void-map-tiles` from GitHub. These are not validated 667 cache tiles.
+The map fetches `MrSlayerGod/void-map-tiles` through jsDelivr. This owner-maintained fork contains tiles that differ from the upstream dataset; individual locations are not automatically validated against a 667 cache.
 To migrate to your own 667 tile exports, edit `js/map.js` in `CustomTileLayer.getTileUrl`.
 
 ## Notes
@@ -55,7 +55,7 @@ If GitHub Pages serves the old map after upload, clear the cached
 - The ` / ` shortcut opens the desktop Explorer before focusing search if it was minimized.
 - New files: `js/ui/loading_controller.js` and `css/atlas-enhancements.css`. To use the patch, upload **all modified files** together.
 
-The source still uses Void-hosted tiles, not newly generated LegacyScape 667 cache tiles. Map/URL/template integration was left unchanged.
+The source now uses the owner-maintained `MrSlayerGod/void-map-tiles` dataset through jsDelivr.
 
 
 ### Wiki integration (October 2026)

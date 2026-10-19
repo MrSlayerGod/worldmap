@@ -173,7 +173,7 @@
                 minZoom: 4, maxZoom: 11, maxBounds: bounds,
                 zoomControl: true, zoomSnap: 1, attributionControl: false, preferCanvas: true});
             var tiles = L.TileLayer.extend({getTileUrl: function (point) {
-                return 'https://cdn.jsdelivr.net/gh/GregHib/void-map-tiles@master/' +
+                return 'https://cdn.jsdelivr.net/gh/MrSlayerGod/void-map-tiles@master/' +
                     floor + '/' + point.z + '/' + point.x + '/' + (-point.y) + '.png';
             }});
             var tileLayer = new tiles('', {tileSize: 256, bounds: bounds, noWrap: true});
@@ -248,7 +248,7 @@
             });
             var Layer = L.TileLayer.extend({
                 getTileUrl: function (tile) {
-                    return 'https://cdn.jsdelivr.net/gh/GregHib/void-map-tiles@master/' +
+                    return 'https://cdn.jsdelivr.net/gh/MrSlayerGod/void-map-tiles@master/' +
                         plane + '/' + tile.z + '/' + tile.x + '/' + (-tile.y) + '.png';
                 }
             });

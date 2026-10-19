@@ -62,7 +62,7 @@ function latLngToGame(latlng) {
 
 const CustomTileLayer = L.TileLayer.extend({
     getTileUrl: function (coords) {
-        return `https://cdn.jsdelivr.net/gh/GregHib/void-map-tiles@master/${plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
+        return `https://cdn.jsdelivr.net/gh/MrSlayerGod/void-map-tiles@master/${plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
     }
 });
 const tiles = new CustomTileLayer('', {
