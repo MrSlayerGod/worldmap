@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10151e">
+  <meta name="description" content="Explore the RuneScape world through the LegacyScape 667 interactive atlas.">
+  <title>World Atlas · LegacyScape 667</title>
+  <link rel="icon" href="favicon/favicon-32x32.png" sizes="32x32">
+  <link rel="stylesheet" href="css/external/bootstrap.min.css">
+  <link rel="stylesheet" href="css/external/leaflet.css">
+  <link rel="stylesheet" href="css/external/jquery-ui.min.css">
+  <!-- Font Awesome is used by the original Void drawing controls. -->
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/external/jquery-3.2.1.min.js"></script>
+  <script src="js/external/jquery-ui.min.js"></script>
+  <script src="js/external/bootstrap.min.js"></script>
+  <script src="js/external/leaflet.js"></script>
+  <script type="module" src="js/map.js"></script>
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="ic-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.6 8.4-2.4 4.8-4.8 2.4 2.4-4.8z"/></symbol>
+    <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.4 4.4"/></symbol>
+    <symbol id="ic-layers" viewBox="0 0 24 24"><path d="m12 2.5 9 5.2-9 5.2-9-5.2 9-5.2ZM3 12l9 5.2 9-5.2M3 16.5l9 5.2 9-5.2"/></symbol>
+    <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M20 10c0 5.4-8 11.5-8 11.5S4 15.4 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+    <symbol id="ic-share" viewBox="0 0 24 24"><path d="M12 16V3m0 0-4.2 4.2M12 3l4.2 4.2M5 13v7h14v-7"/></symbol>
+    <symbol id="ic-crosshair" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 1.5v5M12 17.5v5M1.5 12h5m11 0h5"/></symbol>
+    <symbol id="ic-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></symbol>
+    <symbol id="ic-code" viewBox="0 0 24 24"><path d="m8 5-6 7 6 7m8-14 6 7-6 7m-3.5-17-3 20"/></symbol>
+    <symbol id="ic-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+    <symbol id="ic-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 16v2M4.9 4.9l1.5 1.5m11.2 11.2 1.5 1.5M2 12h2m16 0h2M4.9 19.1l1.5-1.5M17.6 6.4l1.5-1.5"/></symbol>
+    <symbol id="ic-undo" viewBox="0 0 24 24"><path d="M8 7 3 12l5 5M3 12h11a6 6 0 0 1 0 12" transform="translate(0,-3)"/></symbol>
+    <symbol id="ic-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6.5 7l1 14h9l1-14M10 11v6m4-6v6"/></symbol>
+    <symbol id="ic-check" viewBox="0 0 24 24"><path d="m4 12 5.1 5.2L20 6.5"/></symbol>
+    <symbol id="ic-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="ic-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+    <symbol id="ic-plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+    <symbol id="ic-minus" viewBox="0 0 24 24"><path d="M4 12h16"/></symbol>
+    <symbol id="ic-arrow" viewBox="0 0 24 24"><path d="m7 17 10-10M8 7h9v9"/></symbol>
+    <symbol id="ic-spark" viewBox="0 0 24 24"><path d="m12 2.5 2.5 7L21.5 12l-7 2.5-2.5 7-2.5-7L2.5 12l7-2.5z"/></symbol>
+  </svg>
+
+  <div id="container">
+    <div id="map-container"><div id="map" role="application" aria-label="Interactive RuneScape world map"></div></div>
+    <div class="map-shade" aria-hidden="true"></div>
+
+    <header class="app-header">
+      <div class="brand-lockup">
+        <div class="brand-symbol"><svg class="svg-icon"><use href="#ic-compass"></use></svg></div>
+        <div class="brand-text"><strong>LEGACY<span>SCAPE</span></strong><small>667 WORLD ATLAS</small></div>
+      </div>
+      <div class="header-world-tag"><span class="live-dot"></span> EXPLORING GIELINOR <span class="tag-divider">/</span> INTERACTIVE MAP</div>
+      <div class="header-actions">
+        <span class="header-coord"><svg class="svg-icon"><use href="#ic-crosshair"></use></svg><span id="header-position">3222, 3218</span></span>
+        <button class="header-share" type="button" id="share-map"><svg class="svg-icon"><use href="#ic-share"></use></svg><span>Share map</span></button>
+        <button class="mobile-menu-button icon-button" type="button" id="toggle-mobile-menu" aria-expanded="false" aria-controls="explorer-sidebar" aria-label="Open map explorer"><svg class="svg-icon"><use href="#ic-menu"></use></svg></button>
+      </div>
+    </header>
+
+    <aside id="explorer-sidebar" class="explorer-sidebar" aria-label="World map explorer">
+      <div class="sidebar-scroll">
+        <div class="hero-intro">
+          <div class="overline"><span class="overline-line"></span> THE WORLD IS YOURS</div>
+          <h1>Explore <em>Gielinor.</em></h1>
+          <p>Find destinations, uncover places and navigate the world of LegacyScape.</p>
+        </div>
+
+        <section class="search-block" aria-label="Find locations">
+          <label class="section-label" for="atlas-search">FIND A LOCATION <span>01</span></label>
+          <div class="search-field"><svg class="svg-icon"><use href="#ic-search"></use></svg><input id="atlas-search" type="search" placeholder="Search cities, dungeons, places..." autocomplete="off" aria-controls="search-results" aria-expanded="false"><kbd>/</kbd></div>
+          <div id="search-results" class="search-results" hidden></div>
+        </section>
+
+        <section class="popular-block" aria-label="Popular destinations">
+          <div class="section-title-row"><span class="section-label">QUICK TRAVEL <span>02</span></span><span class="section-hint">POPULAR PLACES</span></div>
+          <div class="destinations" id="featured-locations">
+            <div class="loading-note">Loading map destinations…</div>
+          </div>
+        </section>
+
+        <section class="layers-block" aria-label="Map layer settings">
+          <div class="section-title-row"><span class="section-label">MAP LAYERS <span>03</span></span><svg class="svg-icon section-icon"><use href="#ic-layers"></use></svg></div>
+          <label class="layer-option"><span class="layer-option-icon"><svg class="svg-icon"><use href="#ic-pin"></use></svg></span><span class="layer-option-name">Location labels<small>City and landmark names</small></span><input type="checkbox" id="layer-place-labels" checked><span class="toggle-track" aria-hidden="true"></span></label>
+          <label class="layer-option"><span class="layer-option-icon"><svg class="svg-icon"><use href="#ic-grid"></use></svg></span><span class="layer-option-name">Region grid<small>Show region boundaries</small></span><input type="checkbox" id="layer-region-grid"><span class="toggle-track" aria-hidden="true"></span></label>
+          <label class="layer-option"><span class="layer-option-icon"><svg class="svg-icon"><use href="#ic-code"></use></svg></span><span class="layer-option-name">Region IDs<small>Display map region numbers</small></span><input type="checkbox" id="layer-region-labels"><span class="toggle-track" aria-hidden="true"></span></label>
+        </section>
+
+        <section class="coordinate-block" aria-label="Go to map coordinates">
+          <div class="section-title-row"><label class="section-label" for="goto-x">GO TO COORDINATES <span>04</span></label><span class="section-hint">X / Y / Z</span></div>
+          <form id="goto-form" class="goto-form">
+            <label><span>X</span><input id="goto-x" inputmode="numeric" type="number" value="3222" required aria-label="X coordinate"></label>
+            <label><span>Y</span><input id="goto-y" inputmode="numeric" type="number" value="3218" required aria-label="Y coordinate"></label>
+            <label><span>Z</span><input id="goto-z" inputmode="numeric" type="number" min="0" max="3" value="0" required aria-label="Floor"></label>
+            <button type="submit" aria-label="Go to coordinates"><svg class="svg-icon"><use href="#ic-arrow"></use></svg></button>
+          </form>
+          <p class="form-feedback" id="goto-feedback" aria-live="polite"></p>
+        </section>
+      </div>
+      <footer class="sidebar-footer"><svg class="svg-icon"><use href="#ic-spark"></use></svg><span>POWERED BY VOID MAP TILES</span><span class="footer-dot"></span><span>LEGACYSCAPE 667</span></footer>
+    </aside>
+
+    <div class="map-side-actions" aria-label="Map navigation">
+      <div class="map-button-group">
+        <button class="map-action-btn" id="map-zoom-in" aria-label="Zoom in" title="Zoom in"><svg class="svg-icon"><use href="#ic-plus"></use></svg></button>
+        <button class="map-action-btn" id="map-zoom-out" aria-label="Zoom out" title="Zoom out"><svg class="svg-icon"><use href="#ic-minus"></use></svg></button>
+        <button class="map-action-btn" id="map-return-home" aria-label="Return to Lumbridge" title="Return to Lumbridge"><svg class="svg-icon"><use href="#ic-crosshair"></use></svg></button>
+      </div>
+      <div class="floor-picker"><div class="floor-caption">FLOOR</div><div class="floor-list" role="group" aria-label="Map floor"><button type="button" class="floor-button" data-floor="3" aria-pressed="false">3</button><button type="button" class="floor-button" data-floor="2" aria-pressed="false">2</button><button type="button" class="floor-button" data-floor="1" aria-pressed="false">1</button><button type="button" class="floor-button is-active" data-floor="0" aria-pressed="true">G</button></div></div>
+      <button class="developer-trigger" id="open-developer-tools" type="button" aria-expanded="false" aria-controls="advanced-tools-panel" title="Open developer tools"><svg class="svg-icon"><use href="#ic-code"></use></svg><span>TOOLS</span></button>
+    </div>
+
+    <div class="map-location-card" id="selected-location-card" hidden>
+      <div class="selected-symbol"><svg class="svg-icon"><use href="#ic-pin"></use></svg></div>
+      <div><span class="selected-eyebrow">SELECTED LOCATION</span><strong id="selected-location-name"></strong><small id="selected-location-coords"></small></div>
+      <button type="button" id="clear-selection" class="location-dismiss" aria-label="Clear selected location"><svg class="svg-icon"><use href="#ic-close"></use></svg></button>
+    </div>
+
+    <div class="bottom-hud"><div class="hud-section"><span class="status-indicator"></span><span id="hud-status">MAP READY</span></div><span class="hud-separator"></span><div class="hud-section"><span class="hud-label">POSITION</span><strong id="hud-coordinates">3222, 3218, 0</strong></div><span class="hud-separator"></span><div class="hud-section region-hud"><span class="hud-label">REGION</span><strong id="hud-region">12850</strong></div><span class="hud-separator"></span><div class="hud-section"><span class="hud-label">ZOOM</span><strong id="hud-zoom">8×</strong></div><div class="hud-flex"></div><span class="hud-tip">Drag to explore <span>·</span> Scroll to zoom</span></div>
+
+    <div id="sidebar-backdrop" class="sidebar-backdrop" hidden></div>
+    <aside id="advanced-tools-panel" class="advanced-tools-panel" aria-label="Developer map tools" aria-hidden="true">
+      <div class="tools-heading"><div><span class="overline">ADVANCED TOOLS</span><h2>Map editor</h2></div><button class="icon-button" id="close-developer-tools" type="button" aria-label="Close developer tools"><svg class="svg-icon"><use href="#ic-close"></use></svg></button></div>
+      <p>Draw tile areas, polygons and paths, then export the coordinates for your RSPS.</p>
+      <div class="advanced-tools-toolbar" id="advanced-tools-toolbar"></div>
+      <div class="advanced-tools-description"><span class="tools-dot"></span> Select a drawing mode, then click tiles on the map.</div>
+    </aside>
+
+    <!-- Original Void collection editor panels: left intact for full compatibility. -->
+    <div class="slide-panel" id="code-output-panel"><div class="panel-kicker">EDITOR OUTPUT</div><pre id="code-output-pre"><code id="code-output" contenteditable="true" spellcheck="false"></code></pre></div>
+    <div class="slide-panel" id="settings-panel"><div class="panel-kicker">EXPORT SETTINGS</div><form class="form-horizontal"><div class="form-group"><label class="control-label" for="output-type">Output format</label><select class="form-control" id="output-type"><option>Groml</option><option>Array</option><option>List</option><option>Arrays.asList</option><option>Raw</option></select></div><div class="form-group"><label class="control-label" for="bot-api">Bot API</label><select class="form-control" id="bot-api"><option>Default</option></select></div></form></div>
+    <div id="atlas-toast" role="status" aria-live="polite" class="atlas-toast" hidden></div>
+  </div>
+</body>
+</html>

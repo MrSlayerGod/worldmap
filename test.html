@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Static Tile Grid (Zoom Level 0)</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <style>
+        html, body, #map {
+            height: 100%;
+            margin: 0;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    const tileSize = 256;
+    const numTiles = 256;
+    const bounds = [[0, 0], [tileSize * numTiles, tileSize * numTiles]];
+    L.CRS.SimpleOffset = L.extend({}, L.CRS.Simple, {
+        offsetZoom: 8,  // Change this to your preferred base zoom
+
+        scale: function (zoom) {
+            return Math.pow(2, zoom - this.offsetZoom);
+        },
+
+        zoom: function (scale) {
+            return Math.log(scale) / Math.LN2 + this.offsetZoom;
+        },
+
+        // Optional: reset transformation to default for L.CRS.Simple
+        // because we don't want any y-flipping or weird shifting.
+        // Transformation takes (x, y) and applies: scale * (x, y) + offset
+        transformation: new L.Transformation(1, 0, -1, 0)
+    });
+
+    const startX = 50
+    const startY = 50
+
+    const map = L.map('map', {
+        crs: L.CRS.SimpleOffset,
+        maxBounds: bounds,
+        center: [tileSize * startY, tileSize * startX],
+        minZoom: 4,  // Allow zooming out
+        maxZoom: 11,   // Allow zooming in
+        zoom: 8,      // Start at base zoom
+        zoomControl: true, // Re-enable zoom controls
+        tms: true,
+        scrollWheelZoom: true,
+    });
+
+    const CustomTileLayer = L.TileLayer.extend({
+        getTileUrl: function (coords) {
+            return `./map_tiles/test-2/0/${coords.z}/${coords.x}/${-coords.y}.png`;
+        },
+        createTile: function (coords, done) {
+            var tile = document.createElement('div');
+            tile.style.width = tileSize + 'px';
+            tile.style.height = tileSize + 'px';
+            tile.style.overflow = 'hidden';
+            tile.style.outline = '1px solid red';
+
+            const label = document.createElement('div');
+            label.style.position = 'absolute';
+            label.style.color = 'white';
+            label.style.fontSize = '10px';
+            label.style.zIndex = '1';
+            label.style.top = '50%'
+            label.style.width = '100%'
+            label.style.textAlign = 'center';
+            label.innerText = [coords.x, -coords.y].join(', ');
+            tile.appendChild(label);
+            console.log(coords)
+
+            var img = document.createElement('img');
+            img.src = this.getTileUrl(coords);
+            img.onload = () => done(null, tile);
+            img.onerror = () => {
+                img.style.display = 'none'
+                done(null, tile);
+            }
+
+            img.width = tileSize
+            img.height = tileSize
+            img.style.display = 'block';
+            tile.appendChild(img)
+            return tile
+        }
+    });
+
+    const tileLayer = new CustomTileLayer({
+        tileSize: tileSize,
+        bounds: bounds,
+    });
+
+    tileLayer.addTo(map);
+
+    // createTile: function (coords, done) {
+    //     var tile = document.createElement('div');
+    //     tile.style.width = tileSize + 'px';
+    //     tile.style.height = tileSize + 'px';
+    //     tile.style.overflow = 'hidden';
+    //     tile.style.outline = '1px solid red';
+    //
+    //     const label = document.createElement('div');
+    //     label.style.position = 'absolute';
+    //     label.style.color = 'white';
+    //     label.style.fontSize = '10px';
+    //     label.style.zIndex = '1';
+    //     label.style.top = '50%'
+    //     label.style.width = '100%'
+    //     label.style.textAlign = 'center';
+    //     label.innerText = [coords.x, -coords.y].join(', ');
+    //     tile.appendChild(label);
+    //
+    //     function createImage(x, y, offsetX, offsetY) {
+    //         var tile = document.createElement('div');
+    //         tile.style.width = tileSize + 'px';
+    //         tile.style.height = tileSize + 'px';
+    //         tile.style.overflow = 'hidden';
+    //         const zoomDiff = coords.z - 2; // 0 is our base zoom level
+    //         const scale = Math.pow(2, zoomDiff);
+    //
+    //         var img = document.createElement('img');
+    //         img.src = `./map_tiles/0/${x}/${y}.png`;
+    //         img.onload = () => done(null, tile);
+    //         img.onerror = () => done(null, tile);
+    //
+    //         // Scale the image based on zoom difference
+    //
+    //         img.width = tileSize * scale;
+    //         img.height = tileSize * scale;
+    //         img.style.display = 'block';
+    //         tile.appendChild(img)
+    //         img.style.outline = '1px solid blue';
+    //
+    //         console.log(`Zoom: ${coords.z}, Coords: ${coords.x}, ${coords.y}, Base: ${x}, ${y}, Scale: ${scale}`);
+    //         return tile;
+    //     }
+    //
+    //     if (coords.z < 2) {
+    //         tile.style.display = 'flex'
+    //         tile.style.flexDirection = 'column'
+    //         for (let y = 1; y >= 0; y--) {
+    //             var row = document.createElement('div')
+    //             row.style.display = "flex";
+    //             for (let x = 0; x < 2; x++) {
+    //                 const baseCoords = this._getBaseCoords(coords);
+    //                 var img = createImage(baseCoords.x + x, baseCoords.y + y, x, y);
+    //                 img.style.width = '100%';
+    //                 img.style.height = '100%';
+    //                 img.style.objectFit = 'cover';
+    //                 img.style.display = 'block';
+    //                 img.style.flex = '1';
+    //                 row.appendChild(img);
+    //             }
+    //             tile.appendChild(row)
+    //         }
+    //     } else {
+    //         // Always use zoom level 0 tiles regardless of current zoom
+    //         var img = document.createElement('img');
+    //
+    //         // Always use zoom level 0 tiles regardless of current zoom
+    //         const baseCoords = this._getBaseCoords2(coords);
+    //         img.src = `./map_tiles/test/0/${baseCoords.x}/${baseCoords.y}.png`;
+    //
+    //         img.onload = () => done(null, tile);
+    //         img.onerror = () => done(null, tile);
+    //
+    //         // Scale the image based on zoom difference
+    //         const zoomDiff = coords.z - 0; // 0 is our base zoom level
+    //         const scale = Math.pow(2, zoomDiff);
+    //
+    //         img.width = tileSize * scale;
+    //         img.height = tileSize * scale;
+    //         img.style.display = 'block';
+    //
+    //         // Position the image within the tile based on sub-tile coordinates
+    //         if (zoomDiff > 0) {
+    //             const subX = coords.x % Math.pow(2, zoomDiff);
+    //             const subY = (Math.pow(2, zoomDiff) - 1) - ((-coords.y) % Math.pow(2, zoomDiff));
+    //             img.style.marginLeft = -subX * tileSize + 'px';
+    //             img.style.marginTop = -subY * tileSize + 'px';
+    //             img.style.imageRendering = 'crisp-edges'
+    //         }
+    //
+    //         console.log(`Zoom: ${coords.z}, Coords: ${coords.x}, ${coords.y}, Base: ${baseCoords.x}, ${baseCoords.y}, Scale: ${scale}`);
+    //
+    //         tile.appendChild(img);
+    //         tile.style.outline = '1px solid red';
+    //     }
+    //     return tile;
+    // },
+</script>
+
+</body>
+</html>
