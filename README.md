@@ -69,3 +69,10 @@ No build system is needed.
 ## Validation
 
 Both new/modified JS modules passed Node syntax checks. Internal script imports, HTML ids referenced from the UI code, and the location JSON were checked. Automated Chromium navigation was blocked by the test environment, so full rendered browser QA and live remote tile availability were **not** verified. Test the published site in your browser before making it your production map.
+
+
+## Modern v2 adjustments
+- Stabilised location label rendering.
+- Improved large area label sizing and vertical centering.
+- Reduced aggressive text growth across zoom levels.
+- Kept the modern floating tools panel and original Void editing tools.
