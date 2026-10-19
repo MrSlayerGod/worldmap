@@ -1,0 +1,34 @@
+:root { color-scheme: dark; font-family: Inter, system-ui, Arial, sans-serif; }
+* { box-sizing: border-box; }
+html, body, #map { margin: 0; width: 100%; height: 100%; background: #101b27; overflow: hidden; }
+#header { position: absolute; z-index: 990; left: 13px; top: 13px; display: flex; gap: 10px; align-items: center; padding: 9px 12px; border-radius: 9px; border: 1px solid #425363; background: rgba(15, 26, 36, .94); color: #fff; box-shadow: 0 7px 22px #050e16ad; }
+#header strong { letter-spacing: .04em; font-size: 13px; } #header strong span { color: #e9bd73; }
+.header-sub { color: #aab7c0; font-size: 10px; letter-spacing: .12em; }
+#atlas-link { color: #f1cb90; font-size: 11px; text-decoration: none; font-weight: 750; margin-left: 8px; white-space: nowrap; }
+#atlas-link:hover { text-decoration: underline; }
+.floor-switch { position: absolute; z-index: 1000; right: 12px; top: 60px; background: #152331f5; border: 1px solid #465665; border-radius: 9px; padding: 5px; box-shadow: 0 7px 25px #0006; display: flex; flex-direction: column; gap: 4px; }
+.floor-switch .label { color: #aab5be; font-weight: 750; font-size: 9px; text-align: center; letter-spacing: .1em; margin: 2px; }
+.floor-switch button { width: 31px; height: 31px; color: #dce7ee; border: 0; background: #233646; border-radius: 5px; cursor: pointer; font-weight: 750; }
+.floor-switch button.active { background: #ebc181; color: #152331; }
+#status, #coordinates { position: absolute; z-index: 800; bottom: 10px; padding: 7px 10px; border-radius: 7px; background: #142230ed; border: 1px solid #3f4d59; font-size: 11px; color: #c7d4dc; }
+#status { left: 10px; } #coordinates { right: 10px; font-family: Consolas, monospace; }
+.map-note { z-index: 1001; position: absolute; left: 50%; top: 55px; transform: translateX(-50%); max-width: 80%; background: #56382d; color: #ffe0bb; border: 1px solid #e7b67b; border-radius: 6px; padding: 8px 12px; font-size: 12px; }
+.leaflet-control-zoom { margin-top: 64px !important; }
+.leaflet-control-zoom a { color: #f4d29a; background: #192736; border-color: #465664; }
+.leaflet-control-zoom a:hover { background: #31465a; }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip { background: #1a2935; color: #f1f3f4; }
+.wiki-feature-popup { min-width: 140px; } .wiki-feature-popup h3 { margin: 0 0 6px; font-size: 13px; color: #ebc489; }
+.wiki-feature-popup p { font-size: 11px; white-space: pre-line; margin: 5px 0; max-height: 150px; overflow-y: auto; }
+.wiki-feature-popup small { color: #aabac4; font-family: Consolas, monospace; }
+.wiki-map-icon { background: none; border: 0; }
+.wiki-pin { width: 19px; height: 25px; display: block; position: relative; filter: drop-shadow(1px 2px 2px #000a); }
+.wiki-pin::before { content: ''; display: block; width: 17px; height: 17px; background: var(--pin, #72a8e8); border: 2px solid #f2e5c8; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
+.wiki-pin::after { content: ''; position: absolute; top: 5px; left: 5px; width: 7px; height: 7px; border-radius: 50%; background: #fdf9f0; }
+.wiki-label { color: #f9ecd4; font-size: 12px; font-weight: 750; white-space: nowrap; text-shadow: 0 1px 4px #000, 1px 1px 2px #000; }
+.wiki-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; background: var(--dot,#fff); box-shadow: 0 2px 6px #000b; }
+body.embed #header { display: none; }
+body.embed .floor-switch { top: 8px; right: 8px; }
+body.embed #status { font-size: 10px; bottom: 6px; left: 6px; }
+body.embed #coordinates { font-size: 10px; bottom: 6px; right: 6px; }
+body.embed .leaflet-control-zoom { margin-top: 7px !important; }
+@media (max-width: 450px) { #header { left: 7px; top: 7px; gap: 6px; padding: 8px; } .header-sub { display: none; } .floor-switch { top: 56px; } }

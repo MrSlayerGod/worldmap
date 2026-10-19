@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111c28">
+  <title>LegacyScape 667 · Wiki Map</title>
+  <link rel="stylesheet" href="css/external/leaflet.css">
+  <link rel="stylesheet" href="css/wiki-map.css">
+  <script src="js/external/leaflet.js"></script>
+  <script type="module" src="js/wiki_map_viewer.js"></script>
+</head>
+<body>
+  <div id="map" role="application" aria-label="LegacyScape 2D wiki map"></div>
+  <header id="header"><strong><span>LEGACY</span>SCAPE</strong><span class="header-sub">667 WIKI MAP</span><a id="atlas-link" href="./" target="_blank" rel="noopener noreferrer">Full atlas ↗</a></header>
+  <div class="floor-switch" aria-label="Map floor">
+    <div class="label">FLOOR</div>
+    <button data-floor="3" title="Floor 3">3</button>
+    <button data-floor="2" title="Floor 2">2</button>
+    <button data-floor="1" title="Floor 1">1</button>
+    <button data-floor="0" title="Ground level">G</button>
+  </div>
+  <div id="map-note" class="map-note" hidden></div>
+  <div id="status" aria-live="polite">Loading map…</div>
+  <div id="coordinates">—</div>
+</body>
+</html>

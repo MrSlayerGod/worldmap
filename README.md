@@ -43,3 +43,16 @@ To verify in the browser:
 
 If GitHub Pages serves the old map after upload, clear the cached
 `js/ui/modern_ui.js` and `js/map.js` (hard refresh with Ctrl+F5).
+
+
+## v5: First-load progress and collapsible Explorer
+
+- New branded Gielinor loading screen. The progress bar is driven by **real Leaflet tile events** (`tileloadstart`, `tileload`, `tileerror`, `load`). Since new requests can arrive during the load, percentages are an approximate progress indication for tiles requested to date, not total bytes downloaded.
+- On startup, the overlay clears when initial tile requests settle. Users can dismiss a slow load after ~9 seconds; it always clears after ~17 seconds even if a tile host is down.
+- Quick Travel, panning and floor changes show a smaller, **non-blocking** tile-loading strip whenever additional tiles are requested.
+- Desktop Explorer now has a **minimize arrow** in the upper-right corner; an **Explorer** pill appears on the map when hidden. The state persists locally in the same browser.
+- Mobile retains its existing menu drawer; the desktop collapse control is hidden on mobile.
+- The ` / ` shortcut opens the desktop Explorer before focusing search if it was minimized.
+- New files: `js/ui/loading_controller.js` and `css/atlas-enhancements.css`. To use the patch, upload **all modified files** together.
+
+The source still uses Void-hosted tiles, not newly generated LegacyScape 667 cache tiles. Map/URL/template integration was left unchanged.
