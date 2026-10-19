@@ -56,3 +56,9 @@ If GitHub Pages serves the old map after upload, clear the cached
 - New files: `js/ui/loading_controller.js` and `css/atlas-enhancements.css`. To use the patch, upload **all modified files** together.
 
 The source still uses Void-hosted tiles, not newly generated LegacyScape 667 cache tiles. Map/URL/template integration was left unchanged.
+
+
+### Wiki integration (October 2026)
+
+This repository is deployed to `https://mrslayergod.github.io/worldmap/`.
+The wiki integration files in the accompanying package render maps directly in MediaWiki with Leaflet, and link full maps to this URL. `wiki-map.html` remains available as a standalone viewer.
