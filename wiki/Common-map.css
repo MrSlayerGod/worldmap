@@ -1,0 +1,29 @@
+/* Append to MediaWiki:Common.css; keep the rest of the site's stylesheet. */
+.mw-parser-output .ls-map-collapsible {
+    display: inline-block; float: none; margin: 0; border: 0; background: none;
+    max-width: 100%; vertical-align: middle;
+}
+.mw-parser-output .ls-map-toggle {
+    border: 0; padding: 2px 0; background: transparent; color: inherit;
+    font: inherit; cursor: pointer; white-space: nowrap;
+}
+.mw-parser-output .ls-map-toggle::before { content: '📍'; margin-right: .25em; }
+.mw-parser-output .ls-map-toggle:hover { text-decoration: underline; }
+.mw-parser-output .ls-map-toggle:focus-visible { outline: 2px solid #dfb760; outline-offset: 3px; }
+.mw-parser-output .ls-map-panel { position: relative; width: min(420px, 75vw); margin-top: .5em; }
+.mw-parser-output .ls-map-panel[hidden],
+.mw-parser-output .ls-map-load-label[hidden] { display: none !important; }
+.mw-parser-output .ls-osrs-map-frame { position: relative; }
+.mw-parser-output .ls-osrs-map-placeholder { min-height: 160px; }
+.mw-parser-output .ls-osrs-map-placeholder img { max-width: none !important; max-height: none !important; }
+.mw-parser-output .ls-osrs-map-placeholder .leaflet-tile { image-rendering: pixelated; }
+.mw-parser-output .ls-osrs-map-footer { padding: .3em .5em; font-size: .85em; }
+.mw-parser-output .ls-map-load-label { position: absolute; z-index: 450; left: 15%; right: 15%; top: 45%; padding: .4em; text-align: center; background: #18232d; color: #fff; }
+.mw-parser-output .infobox-scenery .advanced-data { display: none; }
+.mw-parser-output .infobox-scenery.show-advanced-data .advanced-data { display: table-row; }
+.mw-parser-output .infobox-switch [data-switch-index] { cursor: pointer; }
+.mw-parser-output .infobox-switch [data-switch-index][aria-pressed="true"] { outline: 1px solid currentColor; }
+.mw-parser-output .ls-pottery-products td:nth-child(2),
+.mw-parser-output .ls-pottery-products td:nth-child(4),
+.mw-parser-output .ls-pottery-products td:nth-child(5) { text-align: center; white-space: nowrap; }
+.mw-parser-output .ls-pottery-products .ls-item-icon { display: inline-block; width: 36px; vertical-align: middle; }

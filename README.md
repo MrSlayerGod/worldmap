@@ -61,3 +61,6 @@ The source now uses the owner-maintained `MrSlayerGod/void-map-tiles` dataset th
 
 This repository is deployed to `https://mrslayergod.github.io/worldmap/`.
 The wiki integration files in the accompanying package render maps directly in MediaWiki with Leaflet, and link full maps to this URL. `wiki-map.html` remains available as a standalone viewer.
+
+## 667 map reliability and wiki integration
+The current export includes facility icons (banks, shops, water and other symbols) from the same 667 cache. The renderer must use `-Dmap.icons=true` and a fresh output directory or `-Dmap.force=true`; the earlier export had icons disabled. The atlas loads same-origin tiles first and retries failed requests; unexported areas use the generated coverage index. The wiki installation package and exact steps are in `wiki/README.md`. OSRS-style parsing does not require its proprietary wiki extensions.

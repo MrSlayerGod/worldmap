@@ -14,6 +14,12 @@ export function createAtlasLoadingController() {
     const stripBar = el('atlas-tiles-bar-fill');
     const stripMessage = el('atlas-tiles-message');
     const skip = el('atlas-loading-skip');
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.textContent = 'Retry tiles';
+    retry.hidden = true;
+    retry.addEventListener('click', () => { if (currentLayer) currentLayer.redraw(); });
+    strip.appendChild(retry);
 
     let initial = true;
     let currentLayer = null;
@@ -51,7 +57,16 @@ export function createAtlasLoadingController() {
             overlay.classList.add('is-done');
             window.setTimeout(() => { overlay.hidden = true; }, 425);
         }, Math.max(160, 650 - (Date.now() - begunAt)));
-        hideStrip();
+        if (failed) showFailure();
+        else hideStrip();
+    }
+
+    function showFailure() {
+        window.clearTimeout(stripShowTimer);
+        window.clearTimeout(stripHideTimer);
+        strip.hidden = false;
+        stripMessage.textContent = 'Some map tiles could not load.';
+        retry.hidden = false;
     }
 
     function showStrip() {
@@ -99,6 +114,7 @@ export function createAtlasLoadingController() {
                 started = 0;
                 finished = 0;
                 failed = 0;
+                retry.hidden = true;
                 stripBar.style.width = '6%';
                 hideStrip();
             },
@@ -125,7 +141,8 @@ export function createAtlasLoadingController() {
                     finishInitial();
                 } else {
                     window.clearTimeout(stripShowTimer);
-                    stripHideTimer = window.setTimeout(() => { strip.hidden = true; }, 280);
+                    if (failed) showFailure();
+                    else stripHideTimer = window.setTimeout(() => { strip.hidden = true; }, 280);
                 }
             }
         };
