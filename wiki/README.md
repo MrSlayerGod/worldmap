@@ -1,37 +1,16 @@
-# Wiki map repair
+# LegacyScape 667 wiki integration
 
-The current atlas is https://mrslayergod.github.io/worldmap/ .
-The wiki renders its small maps directly using Leaflet and links to this atlas.
-It does not need the obsolete wiki-map.html viewer or iframe permissions.
+The atlas uses the owner-exported RSPS 667 dataset bundled under tiles/legacy667/ in
+MrSlayerGod/worldmap, pinned to the tiles-667-20261020 tag.
+Source: D:/void-634/images/final-667 (owner's desktop cache export).
+There are 6,180 tiles at native zooms 4-8 across floors 0-3, and 504 labels.
+Leaflet maxNativeZoom is 8; display zooms 9-11 enlarge those native tiles.
+No old dataset is substituted for missing areas.
 
-## Install
+Install wiki/Common.js on MediaWiki:Common.js using an interface administrator
+account, then hard refresh Pottery wheel. The wiki renders inline and its full
+map links use https://mrslayergod.github.io/worldmap/ . It does not use the old
+wiki-map.html viewer. GitHub Pages deployment does not install the wiki script.
 
-1. Deploy this repository change through GitHub Pages.
-2. Replace MediaWiki:Common.js on the wiki with the contents of wiki/Common.js.
-3. Save and hard refresh the Pottery wheel page (Ctrl+F5).
-4. Check that East Ardougne, Crafting Guild and Barbarian Village show tiles and pins.
-5. Open each full-map link and confirm it opens /worldmap/ at the same location.
-
-## Cause
-
-Miraheze's image Content Security Policy permits cdn.jsdelivr.net but blocks
-raw.githubusercontent.com. The wiki script previously used the blocked host.
-Both the atlas and wiki now request the existing image tiles through jsDelivr.
-The dataset is hosted separately; this atlas repository does not contain the
-tile exports. The tile dataset is MrSlayerGod/void-map-tiles, whose image contents differ from the upstream GregHib repository.
-
-The Common.js snapshot preserves the existing feature rendering, atlas URL,
-infobox charge switcher and quest checklist code. Only the tile source URL
-was replaced. It must be installed on the wiki separately from GitHub Pages.
-## Tile detail regression
-
-Pin tile delivery to owner repository revision
-`5d08cecd3a9d6e6366961d17907bd256954b5287` (Update images using new renderer).
-The subsequent `02197cd35b` tile update removes visible trees, paths and other
-objects in the compared Ardougne tile. Selecting master exposed that regression.
-The pin restores the preceding detailed images without rewriting the tile repo.
-Only change this revision after comparing rendered locations at multiple zooms.
-
-The bundled Python generator is a separate OSRS/RuneLite pipeline. It downloads
-the latest OSRS cache and is not configured for LegacyScape 667 cache exports.
-Running it unchanged is not a repair for the 667 dataset.
+The jsDelivr host is permitted by the wiki's image CSP; raw.githubusercontent.com
+is blocked. Existing infobox charge switcher and quest checklist code is retained.

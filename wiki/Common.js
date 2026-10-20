@@ -173,10 +173,10 @@
                 minZoom: 4, maxZoom: 11, maxBounds: bounds,
                 zoomControl: true, zoomSnap: 1, attributionControl: false, preferCanvas: true});
             var tiles = L.TileLayer.extend({getTileUrl: function (point) {
-                return 'https://cdn.jsdelivr.net/gh/MrSlayerGod/void-map-tiles@5d08cecd3a9d6e6366961d17907bd256954b5287/' +
+                return 'https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@tiles-667-20261020/tiles/legacy667/' +
                     floor + '/' + point.z + '/' + point.x + '/' + (-point.y) + '.png';
             }});
-            var tileLayer = new tiles('', {tileSize: 256, bounds: bounds, noWrap: true});
+            var tileLayer = new tiles('', {tileSize: 256, minNativeZoom: 4, maxNativeZoom: 8, bounds: bounds, noWrap: true});
             var count = 0;
             collection.features.slice(0, 400).forEach(function (feature) {
                 var layer = createFeature(feature, floor);
@@ -248,11 +248,11 @@
             });
             var Layer = L.TileLayer.extend({
                 getTileUrl: function (tile) {
-                    return 'https://cdn.jsdelivr.net/gh/MrSlayerGod/void-map-tiles@5d08cecd3a9d6e6366961d17907bd256954b5287/' +
+                    return 'https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@tiles-667-20261020/tiles/legacy667/' +
                         plane + '/' + tile.z + '/' + tile.x + '/' + (-tile.y) + '.png';
                 }
             });
-            new Layer('', { tileSize: 256, bounds: bounds, noWrap: true }).addTo(leaflet);
+            new Layer('', { tileSize: 256, minNativeZoom: 4, maxNativeZoom: 8, bounds: bounds, noWrap: true }).addTo(leaflet);
             leaflet.setView(oldCoords(x, y, true), zoom, { animate: false });
             if (showMarker) {
                 var raw = el.getAttribute('data-coords') || (x + ',' + y);

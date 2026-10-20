@@ -18,8 +18,7 @@ It is **not** a static screenshot or a dummy mockup. The map uses Leaflet, origi
 4. In the right-side **TOOLS** panel, select **Area**, **Polygon** or **Path** to enable the live map drawing features.
 
 ## Map tile source
-The map fetches `MrSlayerGod/void-map-tiles` through jsDelivr. This owner-maintained fork contains tiles that differ from the upstream dataset; individual locations are not automatically validated against a 667 cache.
-To migrate to your own 667 tile exports, edit `js/map.js` in `CustomTileLayer.getTileUrl`.
+The atlas uses the owner's RSPS 667 cache export in `tiles/legacy667`. Native tiles cover zooms 4-8; higher display zooms enlarge zoom-8 tiles. Labels come from the same cache export. See `wiki/README.md` for the pinned revision and installation.
 
 ## Notes
 - Upload this as a replacement website, not as a new MediaWiki `Module:Map`.

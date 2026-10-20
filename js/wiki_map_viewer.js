@@ -62,11 +62,11 @@ function latLngToGame(latlng) {
 
 const CustomTileLayer = L.TileLayer.extend({
     getTileUrl: function (coords) {
-        return `https://cdn.jsdelivr.net/gh/MrSlayerGod/void-map-tiles@5d08cecd3a9d6e6366961d17907bd256954b5287/${plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
+        return `https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@tiles-667-20261020/tiles/legacy667/${plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
     }
 });
 const tiles = new CustomTileLayer('', {
-    tileSize: tileSize,
+    tileSize: tileSize, minNativeZoom: 4, maxNativeZoom: 8,
     bounds: bounds,
     minZoom: zoomMin,
     maxZoom: zoomMax,

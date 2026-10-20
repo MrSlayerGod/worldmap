@@ -121,3 +121,6 @@
   .sidebar-open-button, .explorer-sidebar { transition-duration: .01ms !important; }
   .atlas-tiles-pulse { animation: none; }
 }
+
+/* Cache tiles are pixel art; keep native zoom-8 pixels crisp when enlarged. */
+.leaflet-tile { image-rendering: pixelated; }

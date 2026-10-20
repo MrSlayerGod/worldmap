@@ -18,6 +18,7 @@ import { RegionLookupControl } from './controls/region_lookup_control.js';
 import { TitleLabel } from './controls/title_label.js';
 
 $(document).ready(function () {
+    L.Icon.Default.imagePath = 'css/images/';
     const tileSize = 256;
     const numTiles = 256;
     const startX = 50;
@@ -69,7 +70,7 @@ $(document).ready(function () {
         getTileUrl: function (coords) {
             // When your 667 tiles are generated and hosted, this is the line to change:
             // return `./map_tiles/${map.plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
-            return `https://cdn.jsdelivr.net/gh/MrSlayerGod/void-map-tiles@5d08cecd3a9d6e6366961d17907bd256954b5287/${map.plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
+            return `https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@tiles-667-20261020/tiles/legacy667/${map.plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
         }
     });
 
@@ -81,8 +82,8 @@ $(document).ready(function () {
         if (map.tile_layer !== undefined) {
             map.removeLayer(map.tile_layer);
         }
-        map.tile_layer = new CustomTileLayer({
-            tileSize: tileSize,
+        map.tile_layer = new CustomTileLayer('', {
+            tileSize: tileSize, minNativeZoom: 4, maxNativeZoom: 8, noWrap: true,
             bounds: bounds
         });
         atlasLoader.watch(map.tile_layer);
