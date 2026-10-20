@@ -901,70 +901,70 @@ function feat.rstext(featOpts, mapOpts)
   end
 
    local style
-   
-	local function stylerText()
-		local style = 'text-align:center;'
-		local colour = featOpts.color or featOpts.colour
-		
-	 if colour then
-	 	style = style .. 'color:' .. colour .. ';'
-	 end
-  
-	 if featOpts.font then
-	  	style = style .. 'font-family:\'' .. featOpts.font .. '\';'
-	 else
-	  	style = style .. 'font-family:\'verdana\';'
-	 end 	
-	 
-	 if featOpts.weight then
-		style = style .. 'font-weight:' .. featOpts.weight .. ';'
-	 end 
- 
-	 if featOpts.fontsize then
-	 	style = style .. 'font-size:' .. featOpts.fontsize .. ';'
-	 else
-  		style = style .. 'font-size:11pt;'
-	 end 
 
-	 if featOpts.offsetX then
-	 	style = style .. 'margin-left:' .. featOpts.offsetX .. ';'
-	 end 
-   
-	 if featOpts.offsetY then
-	  	style = style .. 'margin-top:' .. featOpts.offsetY .. ';'
-	 end 
+    local function stylerText()
+        local style = 'text-align:center;'
+        local colour = featOpts.color or featOpts.colour
 
-	 if featOpts.rotate then
-	 	style = style .. 'transform: rotate(' .. featOpts.rotate .. ');'
-	 end
-      
-	 if featOpts.background then
-		style = style .. 'background:' .. featOpts.background .. ';padding:1px 2px;border-radius:4px;'
-	 end
-      
-	 if featOpts.css then
-      	style = style .. featOpts.css
-	 end
-      
+     if colour then
+         style = style .. 'color:' .. colour .. ';'
+     end
+
+     if featOpts.font then
+          style = style .. 'font-family:\'' .. featOpts.font .. '\';'
+     else
+          style = style .. 'font-family:\'verdana\';'
+     end
+
+     if featOpts.weight then
+        style = style .. 'font-weight:' .. featOpts.weight .. ';'
+     end
+
+     if featOpts.fontsize then
+         style = style .. 'font-size:' .. featOpts.fontsize .. ';'
+     else
+          style = style .. 'font-size:11pt;'
+     end
+
+     if featOpts.offsetX then
+         style = style .. 'margin-left:' .. featOpts.offsetX .. ';'
+     end
+
+     if featOpts.offsetY then
+          style = style .. 'margin-top:' .. featOpts.offsetY .. ';'
+     end
+
+     if featOpts.rotate then
+         style = style .. 'transform: rotate(' .. featOpts.rotate .. ');'
+     end
+
+     if featOpts.background then
+        style = style .. 'background:' .. featOpts.background .. ';padding:1px 2px;border-radius:4px;'
+     end
+
+     if featOpts.css then
+          style = style .. featOpts.css
+     end
+
 if not featOpts.shadow and featOpts.rotate then
-	
-	 if string.find(featOpts.rotate, "rad") then
-		rotaterad = featOpts.rotate:gsub("%a", "")
-	elseif string.find(featOpts.rotate, "deg") then
-		rotaterad = math.rad(featOpts.rotate:gsub("%a", ""))	
-	elseif string.find(featOpts.rotate, "turn") then
-		rotaterad = math.rad(featOpts.rotate:gsub("%a", "")/360)	
-	end 
- 
-	style = style .. string.format('text-shadow:%spx %spx 0 #000000;',
+
+     if string.find(featOpts.rotate, "rad") then
+        rotaterad = featOpts.rotate:gsub("%a", "")
+    elseif string.find(featOpts.rotate, "deg") then
+        rotaterad = math.rad(featOpts.rotate:gsub("%a", ""))
+    elseif string.find(featOpts.rotate, "turn") then
+        rotaterad = math.rad(featOpts.rotate:gsub("%a", "")/360)
+    end
+
+    style = style .. string.format('text-shadow:%spx %spx 0 #000000;',
     math.sin(rotaterad + math.pi/4) * math.sqrt(2) * 1.25,
     math.cos(rotaterad + math.pi/4) * math.sqrt(2) * 1.25
     )
     else if not featOpts.shadow then
-    	style = style .. 'text-shadow:1.25px 1.25px 0 #000000;'
-		end
-	end
-	return style
+        style = style .. 'text-shadow:1.25px 1.25px 0 #000000;'
+        end
+    end
+    return style
 end
 
 
@@ -1002,43 +1002,43 @@ function feat.media(featOpts, mapOpts)
   if featOpts.size then
     table.insert(linkSegments, featOpts.size)
   end
-  
+
 
   local style
-   
+
 
  local function stylerMedia()
    local style = ''
 
 
    if featOpts.offsetX then
-  	style = style .. 'margin-left:' .. featOpts.offsetX .. ';'
-   end 
-   
+      style = style .. 'margin-left:' .. featOpts.offsetX .. ';'
+   end
+
    if featOpts.offsetY then
-  	style = style .. 'margin-top:' .. featOpts.offsetY .. ';'
-   end 
-   
+      style = style .. 'margin-top:' .. featOpts.offsetY .. ';'
+   end
+
    if featOpts.rotate then
-  	style = style .. 'transform: rotate(' .. featOpts.rotate .. ');'
+      style = style .. 'transform: rotate(' .. featOpts.rotate .. ');'
    end
-      
+
    if featOpts.background then
-  	style = style .. 'background:' .. featOpts.background .. ';padding:1px 2px;border-radius:4px;'
+      style = style .. 'background:' .. featOpts.background .. ';padding:1px 2px;border-radius:4px;'
    end
-      
+
     if featOpts.css then
      style = style .. featOpts.css
    end
-      
-		if featOpts.outlineColour or featOpts.outlineColor or featOpts.outlineSize or featOpts.outlineBlur then
-			local outlineSize = featOpts.outlineSize or '1px'
-			local outlineColour = featOpts.outlineColour or featOpts.outlineColor or 'black'
-			local outlineBlur = featOpts.outlineBlur or '0px'
-			
-			style = style .. string.format('filter: drop-shadow(%s %s %s %s) drop-shadow(-%s %s %s %s) drop-shadow(-%s -%s %s %s) drop-shadow(%s -%s %s %s);', outlineSize, outlineSize, outlineBlur, outlineColour, outlineSize, outlineSize, outlineBlur, outlineColour, outlineSize, outlineSize, outlineBlur, outlineColour, outlineSize, outlineSize, outlineBlur, outlineColour)
-		end
-	return style
+
+        if featOpts.outlineColour or featOpts.outlineColor or featOpts.outlineSize or featOpts.outlineBlur then
+            local outlineSize = featOpts.outlineSize or '1px'
+            local outlineColour = featOpts.outlineColour or featOpts.outlineColor or 'black'
+            local outlineBlur = featOpts.outlineBlur or '0px'
+
+            style = style .. string.format('filter: drop-shadow(%s %s %s %s) drop-shadow(-%s %s %s %s) drop-shadow(-%s -%s %s %s) drop-shadow(%s -%s %s %s);', outlineSize, outlineSize, outlineBlur, outlineColour, outlineSize, outlineSize, outlineBlur, outlineColour, outlineSize, outlineSize, outlineBlur, outlineColour, outlineSize, outlineSize, outlineBlur, outlineColour)
+        end
+    return style
 end
 
 

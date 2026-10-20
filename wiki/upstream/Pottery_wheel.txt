@@ -39,7 +39,7 @@
 |id4 = 40733
 |id5 = 50732
 }}
-A '''Potter's Wheel''' is used to mould [[soft clay]], obtainable by mixing [[water]] and [[clay]], into other objects. With the relevant [[Crafting]] level, the player can make unfired versions of clay items, gaining Crafting [[experience]]. The player sits down, operates the pedals with their feet and uses their hands to shape the malleable clay. The unfired items produced in this way can then be further refined by placement in a [[Pottery Oven|pottery oven]]. 
+A '''Potter's Wheel''' is used to mould [[soft clay]], obtainable by mixing [[water]] and [[clay]], into other objects. With the relevant [[Crafting]] level, the player can make unfired versions of clay items, gaining Crafting [[experience]]. The player sits down, operates the pedals with their feet and uses their hands to shape the malleable clay. The unfired items produced in this way can then be further refined by placement in a [[Pottery Oven|pottery oven]].
 
 [[Free-to-play]] players can make [[unfired bowl]]s, [[Unfired pie dish|pie dishes]], and [[Unfired pot|pots]] while [[members]] can also create [[Unfired cup|cups]], [[Unfired pot lid|pot lids]], and [[Unfired plant pot|plant pots]].
 
