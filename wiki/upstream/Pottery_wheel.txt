@@ -1,0 +1,166 @@
+{{External|rs=Pottery wheel|rsc=Potter's wheel}}
+{{Otheruses|the potter's wheel crafting facility|the [[Sailing]] island amenity|spinning wheel (amenity)}}
+{{Infobox Scenery
+|version1 = Generic
+|version2 = Sophanem
+|version3 = Darkmeyer
+|name1 = Potter's Wheel
+|name2 = Potter's wheel
+|name3 = Potter's Wheel
+|name4 = Potter's Wheel
+|name5 = Potter's Wheel
+|image1 = [[File:Potter's Wheel.png|250x250px]]
+|image2 = [[File:Potter's Wheel (Sophanem).png|250x250px]]
+|image3 = [[File:Potter's Wheel (Darkmeyer).png|250x250px]]
+|release1 = [[8 May]] [[2001]]
+|release2 = [[10 January]] [[2007]]
+|update1 = Runescape updated (8 May 2001)
+|update2 = Contact!
+|update3 = Darkmeyer
+|members1 = No
+|members2 = Yes
+|members3 = Yes
+|members4 = Yes
+|members5 = Yes
+|quest1 = None
+|quest2 = [[Icthlarin's Little Helper]]
+|quest3 = [[Sins of the Father]]
+|quest4 = None
+|quest5 = None
+|location1 = [[Barbarian Village]],<br/>[[Crafting Guild]],<br/>[[Exam Centre]],<br/>[[East Ardougne]],<br/>[[Rellekka]]
+|location2 = [[Sophanem]]
+|location3 = [[Darkmeyer]]
+|options = Use
+|examine = Used for fashioning clay items.
+|map = No
+|id1 = 4310,14887
+|id2 = 20375
+|id3 = 39395
+|id4 = 40733
+|id5 = 50732
+}}
+A '''Potter's Wheel''' is used to mould [[soft clay]], obtainable by mixing [[water]] and [[clay]], into other objects. With the relevant [[Crafting]] level, the player can make unfired versions of clay items, gaining Crafting [[experience]]. The player sits down, operates the pedals with their feet and uses their hands to shape the malleable clay. The unfired items produced in this way can then be further refined by placement in a [[Pottery Oven|pottery oven]]. 
+
+[[Free-to-play]] players can make [[unfired bowl]]s, [[Unfired pie dish|pie dishes]], and [[Unfired pot|pots]] while [[members]] can also create [[Unfired cup|cups]], [[Unfired pot lid|pot lids]], and [[Unfired plant pot|plant pots]].
+
+==Locations==
+{{ObjectTableHead}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[East Ardougne]]
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:2586,y:3327,icon:greenPin|x:2588,y:3327,icon:greenPin|x:2595,y:3321,icon:greenPin|x:2595,y:3324,icon:greenPin
+|mtype = pin
+|version = 14887
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Crafting Guild]]
+|members = No
+|mapID = 0
+|plane = 0
+|x:2935,y:3289,icon:greenPin|x:2935,y:3291,icon:greenPin|x:2938,y:3289,icon:greenPin|x:2938,y:3291,icon:greenPin
+|mtype = pin
+|version = 14887
+|leagueRegion = Asgarnia
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Barbarian Village]]
+|members = No
+|mapID = 0
+|plane = 0
+|x:3087,y:3409,icon:greenPin|x:3087,y:3410,icon:greenPin
+|mtype = pin
+|version = 14887
+|leagueRegion = Misthalin
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Darkmeyer]]
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:3646,y:3368,icon:redPin|x:3648,y:3370,icon:redPin
+|mtype = pin
+|version = 39395
+|leagueRegion = Morytania
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Rellekka]]
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:2620,y:3659,icon:greenPin
+|mtype = pin
+|version = 4310
+|leagueRegion = Fremennik
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Exam Centre]]
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:3357,y:3333,icon:greenPin
+|mtype = pin
+|version = 14887
+|leagueRegion = Misthalin
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Isle of Souls]]<ref group=notes>Starts as a [[Broken Potter's Wheel]] that must be repaired before use</ref>
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:2163,y:2805,icon:cyanPin
+|mtype = pin
+|version = 40733
+|leagueRegion = Misthalin
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Sophanem]]
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:3314,y:2773,icon:bluePin
+|mtype = pin
+|version = 20375
+|leagueRegion = Desert
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Civitas illa Fortis]]
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:1763,y:3096|x:1769,y:3096
+|mtype = pin
+|version = 50732
+|leagueRegion = Varlamore
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Vatrachos Island]]<ref group=notes>Starts as a [[Potter's wheel (amenity)]] that must be built before use</ref>
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:1883,y:2980
+|mtype = pin
+|version = ?
+|leagueRegion = No
+}}
+{{ObjectTableBottom}}
+{{reflist|group=notes}}
+
+==Products==
+{{Uses facility list|Potter's Wheel}}
+
+{{Pottery}}
+{{Barbarian Village}}
+{{East Ardougne}}
+{{Crafting Guild}}

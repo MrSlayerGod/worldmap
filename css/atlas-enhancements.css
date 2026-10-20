@@ -124,3 +124,4 @@
 
 /* Cache tiles are pixel art; keep native zoom-8 pixels crisp when enlarged. */
 .leaflet-tile { image-rendering: pixelated; }
+.atlas-tiles-loading button { margin-left: .5em; border: 1px solid #a38a5d; border-radius: 4px; background: #24303c; color: #f1d5a0; padding: .2em .5em; cursor: pointer; }

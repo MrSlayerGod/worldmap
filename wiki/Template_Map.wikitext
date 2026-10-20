@@ -1,0 +1,13 @@
+<includeonly>{{#invoke:Map|map}}</includeonly><noinclude>
+LegacyScape 667 cache map. Uses the OSRS-style feature syntax with the 667 dataset.
+
+<pre>{{Map|x=2586|y=3327|plane=0|zoom=2|mtype=pin}}</pre>
+<pre>{{Map|type=maplink|mtype=pin|x:2586,y:3327,icon:greenPin|x:2588,y:3327,icon:greenPin}}</pre>
+<pre>{{Map|mtype=polygon|2580,3320|2590,3320|2590,3330|2580,3330}}</pre>
+
+Default display is a map frame. type=maplink provides a Show map control.
+OSRS zooms -3 through 3 are translated to atlas zooms 4 through 9.
+Legacy atlas zooms 4-11 and positional x/y pairs are also accepted.
+Only mapID=0 is exported; unsupported IDs display an explanatory message.
+No OSRS Bucket/Kartographer extension is required. Native cache detail ends at zoom 8.
+</noinclude>

@@ -1,0 +1,125 @@
+{{Infobox Scenery
+|name = Potter's Wheel
+|image = [[File:Potter's Wheel.png|250px]]
+|release = [[8 May]] [[2001]]
+|members = No
+|quest = None
+|location = [[Barbarian Village]], [[Crafting Guild]], [[Exam Centre]], [[East Ardougne]], [[Rellekka]], [[Sophanem]]
+|options = Use
+|examine = Used for fashioning clay items.
+|map = No
+|id = 4310, 14887, 20375
+}}
+A '''Potter's Wheel''' is used to mould [[soft clay]] into unfired pottery. With the required [[Crafting]] level, players shape the clay at a wheel, then fire it in a [[Pottery oven]].
+
+==Locations==
+{{ObjectTableHead}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[East Ardougne]]
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:2586,y:3327,icon:greenPin|x:2588,y:3327,icon:greenPin|x:2595,y:3321,icon:greenPin|x:2595,y:3324,icon:greenPin
+|mtype = pin
+|version = 14887
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Crafting Guild]]
+|members = No
+|mapID = 0
+|plane = 0
+|x:2935,y:3289,icon:greenPin|x:2935,y:3291,icon:greenPin|x:2938,y:3289,icon:greenPin|x:2938,y:3291,icon:greenPin
+|mtype = pin
+|version = 14887
+|leagueRegion = Asgarnia
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Barbarian Village]]
+|members = No
+|mapID = 0
+|plane = 0
+|x:3087,y:3409,icon:greenPin|x:3087,y:3410,icon:greenPin
+|mtype = pin
+|version = 14887
+|leagueRegion = Misthalin
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Rellekka]]
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:2620,y:3659,icon:greenPin
+|mtype = pin
+|version = 4310
+|leagueRegion = Fremennik
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Exam Centre]]
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:3357,y:3333,icon:greenPin
+|mtype = pin
+|version = 14887
+|leagueRegion = Misthalin
+}}
+{{ObjectLocLine
+|name = Potter's Wheel
+|location = [[Sophanem]]
+|members = Yes
+|mapID = 0
+|plane = 0
+|x:3314,y:2773,icon:bluePin
+|mtype = pin
+|version = 20375
+|leagueRegion = Desert
+}}
+{{ObjectTableBottom}}
+
+==Products==
+The table lists standard shaping experience, before any server experience multiplier. Firing the finished item is a separate action at a pottery oven.
+
+{| class="wikitable sortable ls-pottery-products"
+! Product !! Members !! Facility !! Skills !! XP !! Materials
+|-
+| [[File:Unfired bowl.png|36px|link=Unfired bowl]] 1 × [[Unfired bowl]]
+| Free-to-play
+| [[Pottery wheel|Potter’s Wheel]]
+| [[Crafting]] 8
+| 18
+| 1 × [[File:Soft clay.png|36px|link=Soft clay]] [[Soft clay]]
+|-
+| [[File:Unfired pie dish.png|36px|link=Unfired pie dish]] 1 × [[Unfired pie dish]]
+| Free-to-play
+| [[Pottery wheel|Potter’s Wheel]]
+| [[Crafting]] 7
+| 15
+| 1 × [[File:Soft clay.png|36px|link=Soft clay]] [[Soft clay]]
+|-
+| [[File:Unfired plant pot.png|36px|link=Unfired plant pot]] 1 × [[Unfired plant pot]]
+| Members
+| [[Pottery wheel|Potter’s Wheel]]
+| [[Crafting]] 19
+| 20
+| 1 × [[File:Soft clay.png|36px|link=Soft clay]] [[Soft clay]]
+|-
+| [[File:Unfired pot.png|36px|link=Unfired pot]] 1 × [[Unfired pot]]
+| Free-to-play
+| [[Pottery wheel|Potter’s Wheel]]
+| [[Crafting]] 1
+| 6.3
+| 1 × [[File:Soft clay.png|36px|link=Soft clay]] [[Soft clay]]
+|-
+| [[File:Unfired pot lid.png|36px|link=Unfired pot lid]] 1 × [[Unfired pot lid]]
+| Members
+| [[Pottery wheel|Potter’s Wheel]]
+| [[Crafting]] 25
+| 20
+| 1 × [[File:Soft clay.png|36px|link=Soft clay]] [[Soft clay]]
+|}
+<!-- Unfired cups and modern OSRS location variants are not included without evidence that this 667 server supports them. -->

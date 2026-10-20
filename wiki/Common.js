@@ -12,7 +12,10 @@
     // LegacyScape 667 World Atlas is now published at /worldmap/.
     // Embed maps directly with Leaflet: no iframe, frame-src CSP or postMessage.
     var ATLAS_BASE = 'https://mrslayergod.github.io/worldmap/';
-    window.LegacyScapeWikiMapVersion = 'v4-direct-leaflet';
+    window.LegacyScapeWikiMapVersion = 'v5-667-lazy-retry';
+    var SUPPORT_BASE = 'https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@map-wiki-667-v2/js/';
+    var supportLoading = false;
+    var toggleCount = 0;
     var initializedLeaflet = false;
     var leafletLoading = false;
     var pendingLegacyMaps = [];
@@ -148,6 +151,11 @@
         var x = num(frame.getAttribute('data-ls-map-x'), 3233, 0, 16000);
         var y = num(frame.getAttribute('data-ls-map-y'), 3222, 0, 16000);
         var floor = num(frame.getAttribute('data-ls-map-plane'), 0, 0, 3);
+        if (num(frame.getAttribute('data-ls-map-id'), 0, -100, 100000) !== 0) {
+            target.textContent = 'This map ID is not available in the 667 cache export.';
+            frame.setAttribute('data-ls-map-ready', '1');
+            return;
+        }
         var zoom = num(frame.getAttribute('data-ls-map-zoom'), 8, 4, 11);
         var json = frame.getAttribute('data-ls-map-json') || '';
         var collection = {type: 'FeatureCollection', features: []};
@@ -172,11 +180,11 @@
             var map = L.map(target, {crs: L.CRS.LegacyScapeWiki,
                 minZoom: 4, maxZoom: 11, maxBounds: bounds,
                 zoomControl: true, zoomSnap: 1, attributionControl: false, preferCanvas: true});
-            var tiles = L.TileLayer.extend({getTileUrl: function (point) {
-                return 'https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@tiles-667-20261020/tiles/legacy667/' +
-                    floor + '/' + point.z + '/' + point.x + '/' + (-point.y) + '.png';
-            }});
-            var tileLayer = new tiles('', {tileSize: 256, minNativeZoom: 4, maxNativeZoom: 8, bounds: bounds, noWrap: true});
+            var tileLayer = window.createLegacy667TileLayer(L, {
+                getPlane: function () { return floor; },
+                baseUrls: ['https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@map-wiki-667-v2/tiles/legacy667/'],
+                options: { bounds: bounds }
+            });
             var count = 0;
             collection.features.slice(0, 400).forEach(function (feature) {
                 var layer = createFeature(feature, floor);
@@ -186,12 +194,20 @@
             var status = document.createElement('div');
             status.className = 'ls-map-load-label';
             status.textContent = 'Loading LegacyScape map…';
-            frame.appendChild(status);
+            target.parentNode.appendChild(status);
             var errors = 0;
+            tileLayer.on('loading', function () { errors = 0; status.hidden = false; status.textContent = 'Loading map…'; });
             tileLayer.on('tileerror', function () {errors++;});
             tileLayer.on('load', function () {
-                if (errors) status.textContent = 'Some map tiles are unavailable';
-                else status.remove();
+                status.hidden = !errors;
+                if (errors) {
+                    status.textContent = 'Some tiles could not load. ';
+                    var retry = document.createElement('button');
+                    retry.type = 'button';
+                    retry.textContent = 'Retry';
+                    retry.addEventListener('click', function () { tileLayer.redraw(); });
+                    status.appendChild(retry);
+                }
             });
             tileLayer.addTo(map);
             window.setTimeout(function () {
@@ -205,7 +221,7 @@
                 observer.observe(target);
             }
             window.setTimeout(function () {
-                if (status.parentNode && !errors) status.textContent = 'Map tiles are slow to load — you can still open the full map below.';
+                if (!status.hidden && !errors) status.textContent = 'Map tiles are slow to load — you can still open the full map below.';
             }, 12000);
             mapInstances.set(frame, map);
         } catch (err) {
@@ -246,13 +262,11 @@
                 zoomControl: true,
                 zoomSnap: 1
             });
-            var Layer = L.TileLayer.extend({
-                getTileUrl: function (tile) {
-                    return 'https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@tiles-667-20261020/tiles/legacy667/' +
-                        plane + '/' + tile.z + '/' + tile.x + '/' + (-tile.y) + '.png';
-                }
-            });
-            new Layer('', { tileSize: 256, minNativeZoom: 4, maxNativeZoom: 8, bounds: bounds, noWrap: true }).addTo(leaflet);
+            window.createLegacy667TileLayer(L, {
+                getPlane: function () { return plane; },
+                baseUrls: ['https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@map-wiki-667-v2/tiles/legacy667/'],
+                options: { bounds: bounds }
+            }).addTo(leaflet);
             leaflet.setView(oldCoords(x, y, true), zoom, { animate: false });
             if (showMarker) {
                 var raw = el.getAttribute('data-coords') || (x + ',' + y);
@@ -279,6 +293,27 @@
         }
     }
     function drainLegacyMaps() {
+        if (!window.createLegacy667TileLayer || !window.Legacy667TileCoverage) {
+            if (supportLoading) return;
+            supportLoading = true;
+            function loadScript(name, next) {
+                var script = document.createElement('script');
+                script.src = SUPPORT_BASE + name;
+                script.onload = next;
+                script.onerror = function () {
+                    supportLoading = false;
+                    pendingModernMaps.forEach(function (frame) {
+                        var target = frame.querySelector('.ls-osrs-map-placeholder');
+                        if (target) target.textContent = 'Map support could not load. Close and reopen the map to retry, or use the full map link.';
+                    });
+                };
+                document.head.appendChild(script);
+            }
+            loadScript('legacy_tile_manifest.js', function () {
+                loadScript('legacy_tile_layer.js', function () { supportLoading = false; drainLegacyMaps(); });
+            });
+            return;
+        }
         setupLegacyCRS();
         pendingModernMaps.splice(0).forEach(renderOsrsMap);
         pendingLegacyMaps.splice(0).forEach(makeLegacyMap);
@@ -322,6 +357,40 @@
         document.head.appendChild(js);
     }
 
+    function prepareToggle(frame) {
+        if (frame.getAttribute('data-ls-toggle-ready') === '1') return;
+        frame.setAttribute('data-ls-toggle-ready', '1');
+        var panel = document.createElement('div');
+        panel.className = 'ls-map-panel';
+        panel.id = 'ls-map-panel-' + (++toggleCount);
+        while (frame.firstChild) panel.appendChild(frame.firstChild);
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ls-map-toggle';
+        button.textContent = 'Show map';
+        button.setAttribute('aria-label', 'Show map');
+        button.setAttribute('aria-expanded', 'false');
+        button.setAttribute('aria-controls', panel.id);
+        panel.hidden = true;
+        frame.classList.add('ls-map-collapsible');
+        frame.style.width = 'auto';
+        frame.appendChild(button);
+        frame.appendChild(panel);
+        button.addEventListener('click', function () {
+            var open = panel.hidden;
+            panel.hidden = !open;
+            button.textContent = open ? 'Hide map' : 'Show map';
+            button.setAttribute('aria-label', open ? 'Hide map' : 'Show map');
+            button.setAttribute('aria-expanded', String(open));
+            if (!open) return;
+            if (frame.getAttribute('data-ls-map-ready') !== '1') loadLegacyLeaflet([], [frame]);
+            else {
+                var map = mapInstances.get(frame);
+                if (map) window.setTimeout(function () { map.invalidateSize({animate: false, pan: false}); }, 0);
+            }
+        });
+    }
+
     function initMaps(root) {
         if (!root || !root.querySelectorAll) return;
         var modern = [];
@@ -330,6 +399,13 @@
         var legacy = [];
         if (root.matches && root.matches('.rs-map') && root.getAttribute('data-loaded') !== '1') legacy.push(root);
         root.querySelectorAll('.rs-map:not([data-loaded="1"])').forEach(function (el) { legacy.push(el); });
+        modern = modern.filter(function (frame) {
+            if (frame.getAttribute('data-ls-map-lazy') === '1' || frame.closest('td')) {
+                prepareToggle(frame);
+                return false;
+            }
+            return true;
+        });
         if (legacy.length || modern.length) loadLegacyLeaflet(legacy, modern);
     }
 
@@ -349,6 +425,42 @@
                     }
                 });
             });
+        });
+    }
+    function initVersionSwitchers(root) {
+        root.querySelectorAll('.infobox-switch[data-resource-class]').forEach(function (box) {
+            if (box.getAttribute('data-ls-versions-ready') === '1') return;
+            var selector = box.getAttribute('data-resource-class');
+            var resources = box.nextElementSibling;
+            while (resources && !resources.matches(selector)) resources = resources.nextElementSibling;
+            if (!resources) return;
+            box.setAttribute('data-ls-versions-ready', '1');
+            var buttons = box.querySelectorAll('[data-switch-index]');
+            function select(index) {
+                box.querySelectorAll('[data-attr-param]').forEach(function (cell) {
+                    var param = cell.getAttribute('data-attr-param');
+                    var group = Array.from(resources.children).find(function (node) { return node.getAttribute('data-attr-param') === param; });
+                    if (!group) return;
+                    var source = group.querySelector('[data-attr-index="' + index + '"]') || group.querySelector('[data-attr-index="0"]');
+                    if (!source) return;
+                    cell.replaceChildren.apply(cell, Array.from(source.childNodes).map(function (node) { return node.cloneNode(true); }));
+                });
+                buttons.forEach(function (button) {
+                    var active = button.getAttribute('data-switch-index') === index;
+                    button.classList.toggle('selected', active);
+                    button.setAttribute('aria-pressed', String(active));
+                });
+            }
+            buttons.forEach(function (button) {
+                button.setAttribute('role', 'button');
+                button.tabIndex = 0;
+                function choose() { select(button.getAttribute('data-switch-index')); }
+                button.addEventListener('click', choose);
+                button.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); choose(); }
+                });
+            });
+            if (buttons.length) select(buttons[0].getAttribute('data-switch-index'));
         });
     }
     function initChecklists(root) {
@@ -386,6 +498,7 @@
         initMaps(root);
         if (root.querySelectorAll) {
             initChargeSwitchers(root);
+            initVersionSwitchers(root);
             initChecklists(root);
         }
     }

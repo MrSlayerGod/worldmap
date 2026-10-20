@@ -60,17 +60,11 @@ function latLngToGame(latlng) {
     };
 }
 
-const CustomTileLayer = L.TileLayer.extend({
-    getTileUrl: function (coords) {
-        return `https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@tiles-667-20261020/tiles/legacy667/${plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
-    }
-});
-const tiles = new CustomTileLayer('', {
-    tileSize: tileSize, minNativeZoom: 4, maxNativeZoom: 8,
-    bounds: bounds,
-    minZoom: zoomMin,
-    maxZoom: zoomMax,
-    noWrap: true
+const tiles = window.createLegacy667TileLayer(L, {
+    getPlane: () => plane,
+    baseUrls: [new URL('tiles/legacy667/', window.location.href).href,
+        'https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@map-wiki-667-v2/tiles/legacy667/'],
+    options: { bounds }
 }).addTo(map);
 
 // The imported 667 cache does not provide these image tiles yet. This deliberately

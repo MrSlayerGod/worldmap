@@ -1,0 +1,1 @@
+{{#invoke:Infobox Scenery|main}}<noinclude>{{/doc}}</noinclude>

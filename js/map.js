@@ -64,16 +64,6 @@ $(document).ready(function () {
     const requestedPlane = parseInteger(urlParams.get('centreZ'));
     map.plane = isPlane(requestedPlane) ? requestedPlane : 0;
 
-    // Use the owner-maintained tile dataset through Miraheze-permitted jsDelivr.
-    // Dataset provenance alone does not validate every location against the 667 cache.
-    const CustomTileLayer = L.TileLayer.extend({
-        getTileUrl: function (coords) {
-            // When your 667 tiles are generated and hosted, this is the line to change:
-            // return `./map_tiles/${map.plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
-            return `https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@tiles-667-20261020/tiles/legacy667/${map.plane}/${coords.z}/${coords.x}/${-coords.y}.png`;
-        }
-    });
-
     // Track actual Leaflet tile requests for the initial loading screen and
     // compact status strip during navigation; never block map interactions.
     const atlasLoader = createAtlasLoadingController();
@@ -82,9 +72,11 @@ $(document).ready(function () {
         if (map.tile_layer !== undefined) {
             map.removeLayer(map.tile_layer);
         }
-        map.tile_layer = new CustomTileLayer('', {
-            tileSize: tileSize, minNativeZoom: 4, maxNativeZoom: 8, noWrap: true,
-            bounds: bounds
+        map.tile_layer = window.createLegacy667TileLayer(L, {
+            getPlane: () => map.plane,
+            baseUrls: [new URL('tiles/legacy667/', window.location.href).href,
+                'https://cdn.jsdelivr.net/gh/MrSlayerGod/worldmap@map-wiki-667-v2/tiles/legacy667/'],
+            options: { bounds }
         });
         atlasLoader.watch(map.tile_layer);
         map.tile_layer.addTo(map);
