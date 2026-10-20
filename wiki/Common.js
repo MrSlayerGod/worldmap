@@ -460,7 +460,9 @@
                     if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); choose(); }
                 });
             });
-            if (buttons.length) select(buttons[0].getAttribute('data-switch-index'));
+            // Preserve the server-rendered default variant until a user chooses another.
+            var initialButton = box.querySelector('[data-switch-index].selected') || buttons[0];
+            buttons.forEach(function (button) { button.setAttribute('aria-pressed', String(button === initialButton)); });
         });
     }
     function initChecklists(root) {
